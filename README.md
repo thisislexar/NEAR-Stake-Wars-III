@@ -1,6 +1,6 @@
 # <h1 align="center">NEAR Stake Wars III</h1>
 
-<h1 align="center">NEAR Stake Wars III için Validator Kurulum Rehberine hoşgeldiniz. Kuruluma geçmeden önce NEAR Stake Wars hakkında bilgi vermek istiyorum. </h1>  
+<h1 align="center">NEAR Stake Wars III için Validatör Kurulum Rehberine hoşgeldiniz. Kuruluma geçmeden önce NEAR Stake Wars hakkında bilgi vermek istiyorum. </h1>  
 
 ![stakewars3-social](https://user-images.githubusercontent.com/101462877/180663821-187214c4-7ac5-4b15-8c5a-0ca6a8d21dd9.png)
 
@@ -20,13 +20,13 @@ Daha fazla detay için [NEAR Stake Wars](https://near.org/stakewars/) websitesin
 
 # Kurulumda 4 başlık altında ilerleyeceğiz. Bunlar; 
 
--Shardnet cüzdanı oluşturma ve NEAR CLI'yi yükleme
+- Shardnet cüzdanı oluşturma ve NEAR CLI'yi yükleme
 
--Sunucu kurulumunu yapma ve validatör node'u aktive etme
+- Sunucu kurulumunu yapma ve validatör node'u aktive etme
 
--Staking pool oluşturma ve delege/stake etme işlemleri 
+- Staking pool oluşturma ve delege/stake etme işlemleri 
 
--Node durumunu görüntülemek için ayarlamalar
+- Node durumunu görüntülemek için ayarlamalar
 
 
 # Shardnet cüzdanı oluşturma ve NEAR CLI'yi yükleme
@@ -97,7 +97,7 @@ Bu kısımlar seçili olduğu şekilde kalabilir, değiştirmenize gerek yok. Di
 
 ![image](https://user-images.githubusercontent.com/101462877/180667431-4b2680ba-7a9b-4182-8a19-8d8fa7e65552.png)
 
-Bu noktada sunucumuza root olarak bağlanmak için bir şifre belirliyoruz. Bir şifre belirleyin ve kenara kaydedin. Makalenin ilerisinde sunucumuza WinSCP ile bağlanmamız gerekecek, bunun için root şifresi bize lazım.
+Bu noktada sunucumuza root olarak bağlanmak için bir şifre belirliyoruz. Bir şifre belirleyin ve kenara not edin. Makalenin ilerisinde sunucumuza WinSCP ile bağlanmamız gerekecek, bunun için root şifresi bize lazım.
 
 Yine aşağı devam ediyoruz.
 
@@ -151,7 +151,59 @@ npm -v
 
 Eğer node -v kodunu denediğinizde böyle bir çıktı alıyorsanız, `apt install nodejs` kodunu girip tekrar deneyin.
 
+# Şimdi NEAR-CLI'yi sunucumuza kurmamız gerekiyor. Dilerseniz NEAR-CLI için GitHub dokümanına şuradan ulaşabilirsiniz: https://github.com/near/near-cli
+```
+sudo npm install -g near-cli
+```
 
+## Validatör Durumları
+
+Şuan için NEAR-CLI'yi sunucumuza kurduk. Aşağıdaki 3 başlık validatör durumunu kontrol etmek için CLI'yi test eden komutlar. Sıra sıra bunları girerek inceleyebilirsiniz. Fakat bundan önce validatör için Environment düzenlemesi yapmamız gerekiyor.
+
+Environment düzenlemesi için her bir kabuk başlangıcında doğru ağı seçmemiz gerekir.
+
+NEAR ağı için geçerli ağlar şunlardır:
+- GuildNet
+- TestNet
+- MainNet
+- **Shardnet** (biz NEAR Stake Wars için Shardnet'i kullanıyor olacağız)
+
+# Başlıyoruz Environment düzenlemesine.
+```
+export NEAR_ENV=shardnet
+```
+
+# NEAR testnet Environment'ını kalıcı olarak ayarlamak için bu komutu da kullanabilirsiniz:
+```
+echo 'export NEAR_ENV=shardnet' >> ~/.bashrc
+```
+
+## Environment'ımızı ayarladık. Şimdi CLI'yi test edecek komutlara geçebiliriz.
+
+# 1-Teklif
+
+Validatör tarafından ağa katılım için bir teklif yapılır. Bu teklifin kabul edilmesi için stake edilen miktarın o ağ için geçerli olan minimum seat price'ın üzerinde olması gerekir. Shardnet için gerekli minimum seat price bilgisine [buradan](https://explorer.shardnet.near.org/nodes/validators) ulaşabilirsiniz. Ayrıca validatör listesinde en altlara indiğinizde ağa katılmak için bekleyen proposal (teklif) konumundaki validatörleri görebilirsiniz. Aynı verilere aşağıdaki komutu çalıştırarak da erişebilirsiniz.
+
+```
+near proposals
+```
+
+# 2-Güncel Validatörler
+
+Aşağıdaki komut güncel dönemdeki ağdaki aktif validatörleri, üretilen toplam blok sayısını, beklenen blok sayısını ve çevrimiçi oranı göstermektedir. Bu komut, validatörlerin sorun yaşayıp yaşamadığını öğrenmek için kullanılır. Ayrıca yine [explorer](https://explorer.shardnet.near.org/nodes/validators)'a giderek de şuan ağdaki aktif görev yapan validatörlere göz atabilirsiniz.
+
+```
+near validators current
+```
+# 3- Next Validatörler
+
+Bu komutla birlikte ağa katılmak için teklif yapmış ve teklifi onaylanmış validatörleri görebilirsiniz. Yine  [explorer](https://explorer.shardnet.near.org/nodes/validators)'a giderek validatör durumu `joining` olanlara bakabilirsiniz.
+
+```
+near validators next
+```
+
+## Şu ana kadar sunucumuzu güncelledik, bazı gerekli geliştirici ayarlarını yaptık, Shardnet ağındaki validatörümüz için Environment ayarlarını oluşturduk ve NEAR CLI içerisinde bulunan 3 tane görüntüleme komutuna göz attık. Buradan sonrasında node'umuzu kurmayla ve onu çalıştırmayla devam edeceğiz.
 
 # Sunucumuzun NEAR Stake Wars node kurulumu için yeterli olup olmadığına bakmak isterseniz bu kodu girebilirsiniz, girmenizi tavsiye ederim:
 ```
@@ -159,6 +211,9 @@ lscpu | grep -P '(?=.*avx )(?=.*sse4.2 )(?=.*cx16 )(?=.*popcnt )' > /dev/null \
   && echo "Supported" \
   || echo "Not supported"
 ```
+![image](https://user-images.githubusercontent.com/101462877/180748070-cb73ab5f-17bd-4f4c-8a1e-9a34d96bd5cb.png)
+
+
 
 ## Eğer "Supported" çıktısı alıyorsak sunucumuz yeterlidir, "Not Supported" alıyorsak daha yüksek özellikli bir sunucuya geçiş yapmalısınız.
 
@@ -188,6 +243,10 @@ sudo apt install clang build-essential make
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
+
+![image](https://user-images.githubusercontent.com/101462877/180748697-d858bb63-4cf5-4c5c-9cdf-b9f19a944d29.png)
+
+Böyle bir kod çıkarsa y'ye basıp enter'a basıyoruz.
 
 ![image](https://user-images.githubusercontent.com/101462877/180668110-38e73f3a-7c97-4ac7-a0ea-3dd7b51cc0d0.png)
 
@@ -228,4 +287,274 @@ Node'un çalışması için bir çalışma dizini ve konfigürasyon dosyaları g
 ![image](https://user-images.githubusercontent.com/101462877/180668443-c48b5a71-6958-4b8e-accf-3a6514b23474.png)
 
 Burada bu tür bir çıktı ile karşılaşacaksınız, karşılaşmadıysanız sorun var demektir.
+
+Yukarıdaki komutla `config.json`, `genesis.json`, ve `node_key.json`  dosyalarını oluşturduk. 
+
+Bu dosyaların işlevlerini birkaç cümlede anlatmak istiyorum.
+
+- `config.json` dosyası düğümün ağ üzerinde nasıl çalışacağı, eşlerle nasıl iletişim kurulacağı ve fikir birliğine nasıl ulaşılacağı hakkında gerekli bilgileri içeren dosyadır.
+
+- `genesis.json` Ağın başlangıç aşamasında başlattığı verileri içeren dosyadır. Blokzincir üzerindeki ilk hesaplar, sözleşmeler, erişim anahtarları ve diğer kayıtlar bu dosyada depolanır.
+
+- `node_key.json` Node'umuz için public ve private key'leri içeren dosyadır. Bunun yanında, validatör node'unu çalıştırmak için gerekli olan account_id parametresini de içerir.
+
+- `data/` NEAR node'unun güncel durumunun içine yazıldığı klasördür.
+
+## Bu noktada, oluşturduğumuz `config.json` dosyasını node'umuz için kullanılabilir hale getirmemiz gerekiyor. Bunun için şu 2 değişikliği yapmamız gerekiyor:
+
+- `boot_nodes` Eğer başlatma sırasında kullanılacak önyükleme node'larını belirtmediysek oluşturulan `config.json` boş bir dizi gösterir. Bu nedenle `config.json`'u önyükleme node'larını belirten dolu bir diziyle değiştirmemiz gerekiyor. Bunun için de alttaki komutu kullanacağız.
+
+- `tracked_shards` Oluşturduğumuz `config.json` dosyasında bu alan boş. Bunu `"tracked_shards": [0]` ile değiştirmemiz gerekecek. Yine bunun için de, alttaki komutu çalıştırmamız yeterli olacaktır.
+
+```
+rm ~/.near/config.json
+wget -O ~/.near/config.json https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/shardnet/config.json
+```
+
+# Güncel snapshot(anlık görüntü)'ı alma
+
+## ÖNEMLİ! Bu komutu Shardnet üzerinde Hardfork 18/07/2022'de gerçekleştikten sonra zorunlu bir komut değil. Almasanız da olur. Ben yine de anlatacağım almak isteyenler için.
+
+AWS Cli'yi yüklüyoruz:
+
+```
+sudo apt-get install awscli -y
+```
+
+Snapshot'u indiriyoruz `genesis.json` olarak:
+
+```
+cd ~/.near
+wget https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/shardnet/genesis.json
+```
+
+Yukarıdaki kod error verirse dağıtım havuzundaki AWS Cli'nin tarihi geçmiş olabilir. Alttaki komutu deneyip tekrar deneyebilirsiniz:
+
+```
+pip3 install awscli --upgrade
+```
+
+# Şimdi node'umuzu çalıştırmaya geçiyoruz, buradan itibaren dikkatli ilerleyin WinSCP gibi uygulamalar kullanacağız. Komut üzerinden de yapılabiliyor fakat WinSCP üzerinden dosyaları görerek yapmanızı tavsiye ederim, bu sayede hata payını düşürmüş olursunuz.
+
+## Eğer bilgisayarınızda WinSCP yüklü değilse şuradan indirip kurabilirsiniz: https://winscp.net/
+
+# Node'u çalıştırma komutunu giriyoruz:
+
+```
+cd ~/nearcore
+./target/release/neard --home ~/.near run
+```
+![image](https://user-images.githubusercontent.com/101462877/180760174-cd28c2b1-0108-4125-acda-465dbf71c52e.png)
+
+## Burada altını çizdiğim `Downloading headers` kısmı %100 olana kadar bekleyin. %100 olduğuna emin olduktan sonra Ctrl+C ile akışı durdurup tekrar komut girmeye devam edebilirsiniz.
+
+
+# Node'umuzu oluşturduğumuz Shardnet cüzdanına bağlayarak aktive ediyoruz:
+
+```
+near login
+```
+
+![image](https://user-images.githubusercontent.com/101462877/180769443-8f72c20d-fe40-4182-8b2f-b2c293ccf603.png)
+
+Böyle bir soru soruyor, "y" yazıp enter'a basıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/180769643-aa9a3fbd-fd6c-413d-8184-981d6fa05134.png)
+
+Burada `https://` ile başlayan ve `Please authorize`'a kadar olan yeri kopyalıyoruz ve Shardnet cüzdanını oluşturduğunuz tarayıcıya (örneğin Google Chrome) yapıştırıp adrese gidiyoruz. ( `Please authorize` hariç)
+
+![image](https://user-images.githubusercontent.com/101462877/180770279-dc64d945-cb58-4618-ac58-efb897aa3338.png)
+
+Bizi böyle bir sayfa karşılıyor, mavi `Sonraki` butonuna tıklıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/180770342-f379fa8b-ea3f-4dd1-b7eb-51be01bb36d9.png)
+
+Açılan sayfada `Bağlan`'a tıklıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/180770453-ad5e653e-5479-40a1-ab64-619635cfd66e.png)
+
+Hesap kimliğimizi istiyor, görseldeki gibi hesap kimliğimizi yazıyoruz ve `Onayla`'ya tıklıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/180771012-98229f3f-c7d5-4976-a295-3bc3f4cce393.png) ![image](https://user-images.githubusercontent.com/101462877/180771133-a1f66794-df4b-49e1-ac34-1ad7f72d9e44.png)
+
+Onayladıktan sonra böyle bir sayfa çıkıyor, merak etmeyin herhangi bir şeyi yanlış yapmadınız. Hemen bir altındaki görselde görüldüğü gibi hesap kimliğinizi sunucuda komut olarak yazın ve enter'a basın.
+
+
+## NOT: Komutu girip enter'a bastıktan sonra `successfully` yazması gerekiyor. Ben node'u kendim kurarken alttaki gibi bir hatayla karşılaştım arkadaşlar terminal ekranı dondu herhangi bir çıktı vermedi, eğer sizde de böyle olursa ilk olarak terminali kapatıp açıp `near login` kısmından itibaren tekrar deneyin eğer yine olmazsa farklı bir [cüzdan](https://wallet.shardnet.near.org/) açıp işlemleri tekrar yapın.
+
+![image](https://user-images.githubusercontent.com/101462877/180774902-fd5f4e06-e4aa-46fe-bc69-8b103d62b53b.png)
+
+Birkaç denemeden sonra alttaki gibi bir çıktı aldım, başarıyla cüzdanı node'a bağladım.
+
+![image](https://user-images.githubusercontent.com/101462877/180776077-abbae706-66d0-4e60-8635-52e94acc1f84.png)
+
+
+# Şimdi `validator_key.json` dosyamızı kontrol ediyoruz:
+
+
+```
+cat ~/.near/validator_key.json
+```
+
+## Muhtemelen bu komutu girdikten sonra `No such file or directory` hatası alacaksınız, çünkü `validator_key.json` dosyamız daha oluşturulmadı. Şimdi onu oluşturalım. Aşağıdaki komutta `<pool_id>` kısmı sizin oluşturmak istediğiniz pool'un adını içeren `xx.factory.shardnet.near` oluyor. Buradaki `xx`, sizin oluşturmak istediğiniz pool'un adı. Yani örneğin pool isminizin `spiderman` olmasını istiyorsanız aşağıdaki kodda `<pool_id>` kısmına `spiderman.factory.shardnet.near` yazmalısınız. Spiderman'ı denemeyin çünkü zaten öyle bir pool var, hata alırsınız :)
+
+## NOT: Kolaylık olması açısından pool ismimi cüzdan ismimle aynı yapacağım, sizin de öyle yapmanızı tavsiye ederim.
+
+```
+near generate-key <pool_id>
+```
+# Şimdi WinSCP'yi kullanma zamanımız geldi. WinSCP'yi açıyoruz:
+
+![Screenshot_2](https://user-images.githubusercontent.com/101462877/180778874-a93325e1-3ad4-4db7-b11c-bf9edd91fb8f.png)
+
+Bizi böyle bir sayfa karşılıyor.
+
+![image](https://user-images.githubusercontent.com/101462877/180779164-af3fa997-e683-4252-8ba6-b7821d0c4b79.png)
+
+Sunucu adına yukarıdaki [Digital Ocean kontrol paneli](https://cloud.digitalocean.com/projects/)'nde NEAR Stake Wars için oluşturduğumuz sunucunu IP'sini yazıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/180779589-2b5cde24-06d4-4900-a0ba-a60679488424.png)
+
+Kullanıcı adı'na root, parola kısmına ise droplet'i oluştururken kenara not ettiğimiz root şifremizi yazıyoruz ve Oturum Aç'a tıklıyoruz.
+
+
+![image](https://user-images.githubusercontent.com/101462877/180779849-746b3945-ccad-4f0c-b526-5aacca880945.png)
+
+Sağ tarafta böyle bir klasör göreceksiniz, eğer yazısı sönük olan dosyalar sizde görünmüyorsa Ctrl + Alt + H yaparak görünmesini sağlayın. Ve boş bir yere sağ tıklayıp Yenile'ye tıklayın.
+
+![image](https://user-images.githubusercontent.com/101462877/180780288-ecb889bf-8202-46be-9105-b61b16dd7fe4.png)
+
+`.near-credentials` bu dosyanın içine girin.
+
+![image](https://user-images.githubusercontent.com/101462877/180780472-4664f4e1-0caf-4c5e-b12a-a7db107b2dcc.png)
+
+`shardnet` klasörüne girin.
+
+![image](https://user-images.githubusercontent.com/101462877/180780582-2cdebedb-20e8-4f0e-9a0f-61dadd8b5eb2.png)
+
+Burada 2 farklı `.json` dosyası var. Bunlardan `xx.factory.shardnet.near` olana giriyoruz.
+
+![Screenshot_3](https://user-images.githubusercontent.com/101462877/180781047-fb073b95-20d6-4d73-80cd-83aa0a717379.png)
+
+Bizi böyle bir dosya karşılıyor. Bu dosyanın içeriğinin tamamını kopyalıyoruz ve dosyayı kapatıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/180781278-d509c883-b404-4fe9-8143-a308748fd480.png)
+
+Şimdi yukarıdaki root yazısına tıklayarak ana dizine geliyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/180781384-d451596c-5c3e-431e-866b-61ff7f68a52a.png)
+
+Buradaki `.near` dosyasının içine giriyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/180781469-59b8f273-ed60-4024-9074-b512b0bfbbe7.png)
+
+Boş bir yere tıklayıp yeni dosya oluştur diyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/180781602-960c2f01-bdc0-4236-965a-4e0ec87c4978.png)
+
+Dosyamızın ismini `validator_key.json` yapıyoruz. Burası önemli dosya ismini doğru yazdığınızdan emin olun.
+
+![image](https://user-images.githubusercontent.com/101462877/180781741-caa78799-8b71-4ef0-944d-f37ea09093c2.png)
+
+Ardıdan bu şekilde boş bir `json` dosyası karşımıza çıkıyor. Az önce `xx.factory.shardnet.near` dosyasından kopyaladığımız içeriği buraya yapıştırıyoruz.
+
+![Screenshot_4](https://user-images.githubusercontent.com/101462877/180782260-aba5e882-a1cb-4035-b276-45fd74972a13.png)
+
+Yapıştırdığımız içeriğin en sonuna gidip `private_key` olan kısmı `secret_key` olarak değiştiriyoruz. Sadece bu değişikliği yapın başka hiçbir şey değiştirmeyin ya da silmeyin, validatörünüz çalışmaz. Değişikliği yaptıktan sonra Ctrl + S yapıp kaydediyoruz ve dosyayı kapatıyoruz. WinSCP'den de çıkış yapabilirsiniz.
+
+# Terminalimize geri dönüyoruz ve aşağıdaki komutu giriyoruz bu komutun sonuçlanması biraz uzun sürecektir:
+
+```
+target/release/neard run
+```
+
+![image](https://user-images.githubusercontent.com/101462877/180782985-2b0ade3d-d999-4882-94bb-496c632ef14e.png)
+
+Eğer yukarıdaki komutu girerken `No such file or directory` hatası alırsanız `cd nearcore` komutunu girip tekrar deneyin.
+
+![image](https://user-images.githubusercontent.com/101462877/180784554-a014a854-caea-489c-b892-36c4ce0084aa.png)
+
+`Downloading blocks` kısmı %100 olana dek bekliyoruz. %100 olduktan sonra Ctrl + C yapıyoruz.
+
+# Systemd ayarlarını yapıyoruz:
+
+```
+sudo vi /etc/systemd/system/neard.service
+```
+
+# Burada bir pencere açılacak, aşağıdaki kodu olduğu gibi yapıştırıyoruz:
+
+```
+[Unit]
+Description=NEARd Daemon Service
+
+[Service]
+Type=simple
+User=root
+#Group=near
+WorkingDirectory=/root/.near
+ExecStart=/root/nearcore/target/release/neard run
+Restart=on-failure
+RestartSec=30
+KillSignal=SIGINT
+TimeoutStopSec=45
+KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## Ardından bu pencereden çıkmak için Shift + Z + Z yapıyoruz. Shift'ten elimizi çekmeden iki kere arka arkaya Z'ye basıyoruz.
+
+# Sistemi enable hale getiriyoruz:
+
+```
+sudo systemctl enable neard
+```
+
+# Sistemi başlatıyoruz:
+
+```
+sudo systemctl start neard
+```
+
+# Bir hatadan dolayı servis üzerinde değişiklikler yaparsanız, aşağıdaki komutla reload etmeniz gerekir:
+
+```
+sudo systemctl reload neard
+```
+
+# Sistemimiz başlatıldı. Log çıktılarını izlemek isterseniz komut:
+
+```
+journalctl -n 100 -f -u neard
+```
+
+# Logların görünümü için şu komutları girebilirsiniz. İlk komut logları düzenli ve renkli göstermek için gerekli aracı indirir, ikinci komut logları renkli yapar:
+
+```
+sudo apt install ccze
+```
+
+```
+journalctl -n 100 -f -u neard | ccze -A
+```
+
+# Bir validatörün oluşması için:
+
+- Node'umuzun tamamen senkronize olması,
+
+- `validator_key.json` dosyamızın oluşturulması,
+
+- `validator_key.json` dosyamızın içeriğindeki public_key ile sözleşmenin başlatılması,
+
+- Staking pool sözleşme ID'sinin account_id'miz ile aynı olması,
+
+- Minimum seat price'ın karşılanması, (Güncel seat price'a [buradan](https://explorer.shardnet.near.org/nodes/validators) bakabilirsiniz),
+
+- Sözleşmeye ping atılarak teklif sunulması (birazdan geleceğiz ping konusuna),
+
+- Teklif kabul edildikten sonra validatörün 2-3 epoch (dönem) bekleyip aktif validatör setine girmesi,
+
+- Aktif validatör setine girildikten sonra imzalanan blok sayısının %90'ın üzerinde olması gereklidir.
 
