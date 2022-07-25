@@ -119,6 +119,8 @@ Açılan sayfada Console'a tıklıyoruz ve yeni bir pencerede Terminalimiz açı
 Terminalimiz yüklendikten sonra artık node'umuzu kurmaya başlayabiliriz.
 
 
+# Sunucu kurulumunu yapma ve validatör node'u aktive etme
+
 ## Kodları direkt buradan kopyaladıktan sonra terminalde sağ tıklayıp yapıştıra basarak yapıştırabilirsiniz. Sizin için daha kolay ve pratik olur. Bu noktada, ilk olarak NEAR-CLI kurulumu yapacağız. NEAR-CLI, NEAR blokzinciri ile uzaktan prosedür çağrıları (RPC) sayesinde iletişim kuran bir komut satırı arabirimidir. 
 
 # İlk kodumuz sunucumuzu güncellemek için:
@@ -386,7 +388,7 @@ Onayladıktan sonra böyle bir sayfa çıkıyor, merak etmeyin herhangi bir şey
 
 Birkaç denemeden sonra alttaki gibi bir çıktı aldım, başarıyla cüzdanı node'a bağladım.
 
-![image](https://user-images.githubusercontent.com/101462877/180776077-abbae706-66d0-4e60-8635-52e94acc1f84.png)
+![image](https://user-images.githubusercontent.com/101462877/180866887-577c747e-c2a5-4c34-a172-2bb6043c3a3e.png)
 
 
 # Şimdi `validator_key.json` dosyamızı kontrol ediyoruz:
@@ -530,6 +532,11 @@ sudo systemctl reload neard
 journalctl -n 100 -f -u neard
 ```
 
+## Eğer aşağıdaki gibi `No journal files were found.` hatası alırsanız, `systemctl restart systemd-journald.service` kodunu girip tekrar deneyin. Sisteme ufak bir restart atmanız hatayı çözecektir.
+
+![image](https://user-images.githubusercontent.com/101462877/180880044-decd45b8-5ae1-4473-b782-2170c5e92cdb.png)
+
+
 # Logların görünümü için şu komutları girebilirsiniz. İlk komut logları düzenli ve renkli göstermek için gerekli aracı indirir, ikinci komut logları renkli yapar:
 
 ```
@@ -558,3 +565,51 @@ journalctl -n 100 -f -u neard | ccze -A
 
 - Aktif validatör setine girildikten sonra imzalanan blok sayısının %90'ın üzerinde olması gereklidir.
 
+# Staking pool oluşturma ve delege/stake etme işlemleri
+
+NEAR, delegatörlerin fonlarının güvende kalmasını sağlamak için whitelist'e alınmış bir stake sözleşmesine sahip stake havuzu kullanır.
+
+NEAR üzerinde bir validatör çalıştırmak için bir NEAR hesabında stake havuzu dağıtılmalı ve NEAR validatör node'una entegre edilmelidir. Stake havuzu, NEAR hesabına dağıtılmış olan bir akıllı sözleşmedir.
+
+## Stake Havuzu Sözleşmesinin Dağıtımı
+
+Aşağıdaki komut, stake havuzu factory'sini çağırır ve yeni bir stake havuzu oluşturur. Komutu doğrudan terminale YAPIŞTIRMAYIN. Değiştirmeniz gereken kısımları aşağıda belirttim, onları değiştirdikten sonra komutu çalıştırın.
+
+```
+near call factory.shardnet.near create_staking_pool '{"staking_pool_id": "<pool id>", "owner_id": "<accountId>", "stake_public_key": "<public key>", "reward_fee_fraction": {"numerator": 5, "denominator": 100}, "code_hash":"DD428g9eqLL8fWUxv8QSpVFzyHi1Qd16P8ephYCTmMSZ"}' --accountId="<accountId>" --amount=30 --gas=300000000000000
+```
+
+## Burada değiştirmeniz gereken kısımlar:
+
+- <pool id>: Bu kısıma stake havuz adımızı giriyoruz. Örneğin, `spiderman.factory.shardnet.near`
+
+- <accountId>: Bu kısıma hesap kimliğimizi giriyoruz. Örneğin, `spiderman.shardnet.near`
+
+- <public key>: Bu kısım için WinSCP'yi tekrar açıyoruz. Nasıl bağlanacağınızı yukarıda anlatmıştım.
+
+![image](https://user-images.githubusercontent.com/101462877/180886021-4659e678-986a-422e-8c6f-c906a7be82b3.png)
+
+.near klasörüne giriyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/180886090-1f075b87-8f6e-4d33-9ddc-ba2f5bc3187e.png)
+
+`validator_key.json` dosyamızı buluyoruz ve açıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/180886230-9cdbbb0a-e0df-4a90-b7a8-bde86618ef4f.png)
+
+ed25519 ile başlayan `public.key` kısmını olduğu gibi kopyalıyoruz. Komut içerisindeki <public key> yerine yapıştırıyoruz.
+
+- Reward_fee_fraction olarak belirtilen kısım varsayılan olarak %5 olarak belirtilmiş burada. İsterseniz değiştirebilirsiniz ama değiştirmenize gerek yok. Pool'a stake edenlerden alınacak fee'yi temsil ediyor.
+
+- <accountId>: Bu kısıma yine hesap kimliğimizi giriyoruz. Örneğin, `spiderman.shardnet.near`
+
+
+> Bu komutu girmeden önce Shardnet cüzdanınızda en az 30 NEAR olduğuna emin olun. 30 NEAR, stake havuzu oluşturabilmek için tek seferde stake etmeniz gereken minimum miktar.
+
+Oluşturduğunuz havuzun parametrelerini değiştirmek isterseniz, örneğin stake fee değerini değiştirmek isterseniz aşağıda bıraktığım komutu kullanabilirsiniz:
+
+```
+near call <pool_name> update_reward_fee_fraction '{"reward_fee_fraction": {"numerator": 1, "denominator": 100}}' --accountId <account_id> --gas=300000000000000
+```
+
+Ağ patlamış interaktif bir şekilde node'u kuramadığım için yazmaya devam edemiyorum :(
