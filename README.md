@@ -148,9 +148,9 @@ npm -v
 ```
 > 8.x.x
 
-![image](https://user-images.githubusercontent.com/101462877/180668809-7a1b406a-0084-4154-9ceb-db1ff222f765.png)
+Eğer node -v kodunu denediğinizde aşağıdaki gibi bir çıktı alıyorsanız, `apt install nodejs` kodunu girip tekrar deneyin.
 
-Eğer node -v kodunu denediğinizde böyle bir çıktı alıyorsanız, `apt install nodejs` kodunu girip tekrar deneyin.
+![image](https://user-images.githubusercontent.com/101462877/180668809-7a1b406a-0084-4154-9ceb-db1ff222f765.png)
 
 # Şimdi NEAR-CLI'yi sunucumuza kurmamız gerekiyor. Dilerseniz NEAR-CLI için GitHub dokümanına şuradan ulaşabilirsiniz: https://github.com/near/near-cli
 ```
@@ -285,7 +285,7 @@ cargo build -p neard --release --features shardnet
 ## Bu kısımda eğer No such file tarzı bir uyarı veriyorsa yanlış klasördesinizdir, `cd nearcore` yazarak tekrar deneyin.
 
 # Çalışma dizinini başlatıyoruz:
-Node'un çalışması için bir çalışma dizini ve konfigürasyon dosyaları gerekir. Bunlar için aşağıdaki kodu çalıştırıyoruzç
+Node'un çalışması için bir çalışma dizini ve konfigürasyon dosyaları gerekir. Bunlar için aşağıdaki kodu çalıştırıyoruz.
 ```
 ./target/release/neard --home ~/.near init --chain-id shardnet --download-genesis
 ```
@@ -318,7 +318,7 @@ wget -O ~/.near/config.json https://s3-us-west-1.amazonaws.com/build.nearprotoco
 
 # Güncel snapshot(anlık görüntü)'ı alma
 
-## ÖNEMLİ! Bu komutu Shardnet üzerinde Hardfork 18/07/2022'de gerçekleştikten sonra zorunlu bir komut değil. Almasanız da olur. Ben yine de anlatacağım almak isteyenler için.
+## ÖNEMLİ! Bu komut, Shardnet üzerinde Hardfork 18/07/2022'de gerçekleştikten sonra zorunlu bir komut değil. Almasanız da olur. Ben yine de anlatacağım almak isteyenler için.
 
 AWS Cli'yi yüklüyoruz:
 
@@ -366,7 +366,7 @@ Böyle bir soru soruyor, "y" yazıp enter'a basıyoruz.
 
 ![image](https://user-images.githubusercontent.com/101462877/180769643-aa9a3fbd-fd6c-413d-8184-981d6fa05134.png)
 
-Burada `https://` ile başlayan ve `Please authorize`'a kadar olan yeri kopyalıyoruz ve Shardnet cüzdanını oluşturduğunuz tarayıcıya (örneğin Google Chrome) yapıştırıp adrese gidiyoruz. ( `Please authorize` hariç)
+Burada `https://` ile başlayan ve `Please authorize`'a kadar olan yeri ( `Please authorize` hariç) kopyalıyoruz ve Shardnet cüzdanını oluşturduğunuz tarayıcıya (örneğin Google Chrome) yapıştırıp adrese gidiyoruz. 
 
 ![image](https://user-images.githubusercontent.com/101462877/180770279-dc64d945-cb58-4618-ac58-efb897aa3338.png)
 
@@ -401,9 +401,7 @@ Birkaç denemeden sonra alttaki gibi bir çıktı aldım, başarıyla cüzdanı 
 cat ~/.near/validator_key.json
 ```
 
-## Muhtemelen bu komutu girdikten sonra `No such file or directory` hatası alacaksınız, çünkü `validator_key.json` dosyamız daha oluşturulmadı. Şimdi onu oluşturalım. Aşağıdaki komutta `<pool_id>` kısmı sizin oluşturmak istediğiniz pool'un adını içeren `xx.factory.shardnet.near` oluyor. Buradaki `xx`, sizin oluşturmak istediğiniz pool'un adı. Yani örneğin pool isminizin `spiderman` olmasını istiyorsanız aşağıdaki kodda `<pool_id>` kısmına `spiderman.factory.shardnet.near` yazmalısınız. Spiderman'ı denemeyin çünkü zaten öyle bir pool var, hata alırsınız :)
-
-## NOT: Kolaylık olması açısından pool ismimi cüzdan ismimle aynı yapacağım, sizin de öyle yapmanızı tavsiye ederim.
+## Muhtemelen bu komutu girdikten sonra `No such file or directory` hatası alacaksınız, çünkü `validator_key.json` dosyamız daha oluşturulmadı. Şimdi onu oluşturalım. Aşağıdaki komutta `<pool_id>` kısmı sizin oluşturmak istediğiniz pool'un adını içeren `xx.factory.shardnet.near` oluyor. Buradaki `xx`, sizin oluşturmak istediğiniz pool'un adı. Burada pool adınızı cüzdan adınızla aynı yapmayı tavsiye ediyorum. Örneğin hesap adınız `spiderman.shardnet.near` ise <pool_id> kısmına `spiderman.factory.shardnet.near` yazın.
 
 ```
 near generate-key <pool_id>
@@ -461,11 +459,11 @@ Dosyamızın ismini `validator_key.json` yapıyoruz. Burası önemli dosya ismin
 
 ![image](https://user-images.githubusercontent.com/101462877/180781741-caa78799-8b71-4ef0-944d-f37ea09093c2.png)
 
-Ardıdan bu şekilde boş bir `json` dosyası karşımıza çıkıyor. Az önce `xx.factory.shardnet.near` dosyasından kopyaladığımız içeriği buraya yapıştırıyoruz.
+Ardından bu şekilde boş bir `json` dosyası karşımıza çıkıyor. Az önce `xx.factory.shardnet.near` dosyasından kopyaladığımız içeriği buraya yapıştırıyoruz.
 
 ![Screenshot_4](https://user-images.githubusercontent.com/101462877/180782260-aba5e882-a1cb-4035-b276-45fd74972a13.png)
 
-Yapıştırdığımız içeriğin en sonuna gidip `private_key` olan kısmı `secret_key` olarak değiştiriyoruz. Sadece bu değişikliği yapın başka hiçbir şey değiştirmeyin ya da silmeyin, validatörünüz çalışmaz. Değişikliği yaptıktan sonra Ctrl + S yapıp kaydediyoruz ve dosyayı kapatıyoruz. WinSCP'den de çıkış yapabilirsiniz.
+Yapıştırdığımız içeriğin en sonuna gidip `private_key` olan kısmı `secret_key` olarak değiştiriyoruz. Sadece bu değişikliği yapın başka hiçbir şey değiştirmeyin ya da silmeyin, validatörünüz çalışmaz. Değişikliği yaptıktan sonra Ctrl + S yapıp kaydediyoruz ve dosyayı kapatıyoruz. WinSCP'yi kapatmayın tekrar lazım olacak.
 
 # Terminalimize geri dönüyoruz ve aşağıdaki komutu giriyoruz bu komutun sonuçlanması biraz uzun sürecektir:
 
@@ -569,7 +567,7 @@ journalctl -n 100 -f -u neard | ccze -A
 - Aktif validatör setine girildikten sonra imzalanan blok sayısının %90'ın üzerinde olması gereklidir.
 
 
-## Bence görevlerin en zor kısmı olan bu kısımla birlikte özet olarak; 
+## Bence kurulumun en zor kısmı olan bu kısımla birlikte özet olarak; 
 
 - Sunucumuza gerekli geliştirici araçlarını yükledik (cargo, rust, python pip vb.), 
 
@@ -577,16 +575,11 @@ journalctl -n 100 -f -u neard | ccze -A
 
 - GitHub üzerinden node'umuzun çalışması için gerekli olan `nearcore`'u yükledik, 
 
-- Yüklediğimiz `nearcore` çalıştırdık,
+- Yüklediğimiz `nearcore`'u çalıştırdık,
  
 - NEAR Shardnet ağındaki ilk verileri içeren `genesis` dosyasını indirip çalıştırdık, 
 
 - `config.json`, `genesis.json`, ve `node_key.json` dosyalarımızı oluşturduk, 
-
-- Gerekli olmasa da isteyenler için en güncel snapshot(`genesis.json`)'u indirdik, 
-
-- Kurduğumuz node'umuzu çalıştırdık,
-
 
 - Gerekli olmasa da isteyenler için en güncel snapshot(`genesis.json`)'u indirdik, 
 
@@ -613,7 +606,7 @@ near call factory.shardnet.near create_staking_pool '{"staking_pool_id": "<pool 
 
 ## Burada değiştirmeniz gereken kısımlar:
 
-- `<pool id>`: Bu kısıma stake havuz adımızı giriyoruz. Örneğin, pool'umuzun adı `spiderman.factory.shardnet.near` ise bu komutu girerken <pool id> kısmına `spiderman` yazacağız.
+- `<pool id>`: Bu kısıma stake havuz adımızı giriyoruz. Örneğin, pool'umuzun adı `spiderman.factory.shardnet.near` ise bu komutu girerken `<pool id>` kısmına `spiderman` yazacağız.
 
 - `<accountId>`: Bu kısıma hesap kimliğimizi giriyoruz. Örneğin, `spiderman.shardnet.near`
 
@@ -625,7 +618,7 @@ near call factory.shardnet.near create_staking_pool '{"staking_pool_id": "<pool 
 
 ![image](https://user-images.githubusercontent.com/101462877/180886090-1f075b87-8f6e-4d33-9ddc-ba2f5bc3187e.png)
 
-`validator_key.json` dosyamızı buluyoruz ve açıyoruz.
+`validator_key.json` dosyamızı buluyoruz ve açıyoruz. Eğer yukarıdaki adımları doğru bir şekilde takip etmenize rağmen bu dosyayı bulamazsanız klasör içerisinde boş bir yere sağ tıklayıp `Yenile` diyelim.
 
 ![image](https://user-images.githubusercontent.com/101462877/180886230-9cdbbb0a-e0df-4a90-b7a8-bde86618ef4f.png)
 
@@ -686,7 +679,7 @@ near call <staking_pool_id> unstake '{"amount": "<amount yoctoNEAR>"}' --account
  
 - `<staking_pool_id>`: xx.factory.shardnet.near
  
-- `<amount yoctoNEAR>`: stake etmek istediğiniz NEAR miktarı, yoctoNEAR cinsinden.
+- `<amount yoctoNEAR>`: unstake etmek istediğiniz NEAR miktarı, yoctoNEAR cinsinden.
  
 - `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
  
@@ -717,7 +710,7 @@ near call <staking_pool_id> withdraw '{"amount": "<amount yoctoNEAR>"}' --accoun
 
 - `<staking_pool_id>`: xx.factory.shardnet.near
  
-- `<amount yoctoNEAR>`: stake etmek istediğiniz NEAR miktarı, yoctoNEAR cinsinden.
+- `<amount yoctoNEAR>`: cüzdana çekmek istediğiniz NEAR miktarı, yoctoNEAR cinsinden.
  
 - `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
  
@@ -795,26 +788,6 @@ near view <staking_pool_id> get_account_unstaked_balance '{"account_id": "<accou
  
 ![image](https://user-images.githubusercontent.com/101462877/180967606-ef703190-0b39-4307-bf2d-97ce2b85150b.png)
 
-
-## Cüzdana Geri Çekilebilir Durumda Olan Bakiye
- 
-Aşağıdaki komut sayesinde unstake edilmiş ve cüzdana geri çekebileceğiniz NEAR miktarını öğrenebilirsiniz. Unutmayın, sadece unlocked olmuş NEAR'ları cüzdanınıza geri çekebilirsiniz, unlocked olması için de unstake edildikten sonra 2-3 epoch beklemeniz gerekir.
- 
-Komut:
-
-```
-near view <staking_pool_id> is_account_unstaked_balance_available '{"account_id": "<accountId>"}'
-```
- 
-- `<staking_pool_id>`: xx.factory.shardnet.near
- 
-- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
- 
-![image](https://user-images.githubusercontent.com/101462877/180968189-7be6e4c3-02e0-4027-9db2-e5c9938fff79.png)
-
-Burada NEAR'larımı yeni unstake ettiğim ve 2-3 epoch geçmediği için NEAR'larım Withdraw için hazır değil, bu yüzden `false` çıktısı verdi. `True` çıktısı verdiğinde NEAR'larımızı cüzdana çekebiliriz.
- 
-
 ## Cüzdana Geri Çekilebilir Durumda Olan Bakiye
  
 Aşağıdaki komut sayesinde unstake edilmiş ve cüzdana geri çekebileceğiniz NEAR miktarını öğrenebilirsiniz. Unutmayın, sadece unlocked olmuş NEAR'ları cüzdanınıza geri çekebilirsiniz, unlocked olması için de unstake edildikten sonra 2-3 epoch beklemeniz gerekir.
@@ -864,7 +837,7 @@ near call <staking_pool_id> resume_staking '{}' --accountId <accountId>
 - `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
 
  
-## Bu kısmın bitişiyle birlikte özel olarak; 
+## Bu kısmın bitişiyle birlikte özet olarak; 
 
 - NEAR Shardnet ağı üzerinde staking havuzu açtık, 
 
@@ -891,7 +864,7 @@ Kaynak: [Stake Wars: Episode III. Challenge 004](https://github.com/near/stakewa
  
 #### Log Dosyaları
  
-Log dosyaları kurulumu nereye yaptığınıza bağlı olarak ~/.nearup/logs dizininde ya da systemd'de depolanır.
+Log dosyaları kurulumu nereye yaptığınıza bağlı olarak `~/.nearup/logs` dizininde ya da `systemd`'de depolanır.
  
  
  Systemd Komutu:
@@ -912,7 +885,7 @@ INFO stats: # 1368392 JAH2UK8ahcAhW859jyMk7NNFVn6bqSAuYNtkcYrZj2o7 Validator | 1
  
 - `34 peers`: Bu kısım sizin bağlandığınız eşlerin sayısını gösterir. Consensus'a erişmek ve doğrulamaya başlayabilmek için en az 3 eşe ihtiyacınız vardır.
  
-- `# 1368392`: Bu kısım ağdaki toplam validatör sayısını belirtir.
+- `# 1368392`: Bu kısım güncel bloğun nerede olduğunu gösterir.
  
  
 ## RPC
@@ -964,7 +937,7 @@ curl -s -d '{"jsonrpc": "2.0", "method": "validators", "id": "dontcare", "params
 - `<POOL_ID>`: xx.factory.shardnet.near
  
 
- # Bu komut sayesinde ağ üzerinde kaç blok ürettiğinizi ve expected bok sayısını görebilirsiniz:
+ # Bu komut sayesinde ağ üzerinde kaç blok ürettiğinizi ve expected blok sayısını görebilirsiniz:
 
  ```
 curl -s -d '{"jsonrpc": "2.0", "method": "validators", "id": "dontcare", "params": [null]}' -H 'Content-Type: application/json' 127.0.0.1:3030 | jq -c '.result.current_validators[] | select(.account_id | contains ("POOL_ID"))'
