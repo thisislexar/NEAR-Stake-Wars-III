@@ -18,18 +18,20 @@ Daha fazla detay için [NEAR Stake Wars](https://near.org/stakewars/) websitesin
 
 ## Bu makalede bahsedeceğim NEAR Stake Wars III görevleri için son tarih [11 Ağustos](https://github.com/near/stakewars-iii/blob/main/challenges/challenge-summary.md). Bunun için, makaleyi gördüğünüz andan itibaren en erken tarihte başlamanızı öneririm.
 
+## Bu dokümanı sağ üstten forklayıp yıldızlamayı unutmayın, GitHub hesabınızda bulunması yararınıza olur.
+
 # Kurulumda 4 başlık altında ilerleyeceğiz. Bunlar; 
 
-- Shardnet cüzdanı oluşturma ve NEAR CLI'yi yükleme
+- 1) Shardnet cüzdanı oluşturma ve NEAR CLI'yi yükleme
 
-- Sunucu kurulumunu yapma ve validatör node'u aktive etme
+- 2) Sunucu kurulumunu yapma ve validatör node'u aktive etme
 
-- Staking pool oluşturma ve delege/stake etme işlemleri 
+- 3) Staking pool oluşturma ve delege/stake etme işlemleri 
 
-- Node durumunu görüntülemek için ayarlamalar
+- 4) Node durumunu görüntülemek için ayarlamalar
 
 
-# Shardnet cüzdanı oluşturma ve NEAR CLI'yi yükleme
+# 1) Shardnet cüzdanı oluşturma ve NEAR CLI'yi yükleme
 
 ## Kaynak olarak GitHub'ı kullanacağım, göz atmak isterseniz: [Stake Wars: Episode III. Challenge 001](https://github.com/near/stakewars-iii/blob/main/challenges/001.md#stake-wars-episode-iii-challenge-001)
 
@@ -118,9 +120,6 @@ Açılan sayfada Console'a tıklıyoruz ve yeni bir pencerede Terminalimiz açı
 
 Terminalimiz yüklendikten sonra artık node'umuzu kurmaya başlayabiliriz.
 
-
-# Sunucu kurulumunu yapma ve validatör node'u aktive etme
-
 ## Kodları direkt buradan kopyaladıktan sonra terminalde sağ tıklayıp yapıştıra basarak yapıştırabilirsiniz. Sizin için daha kolay ve pratik olur. Bu noktada, ilk olarak NEAR-CLI kurulumu yapacağız. NEAR-CLI, NEAR blokzinciri ile uzaktan prosedür çağrıları (RPC) sayesinde iletişim kuran bir komut satırı arabirimidir. 
 
 # İlk kodumuz sunucumuzu güncellemek için:
@@ -206,6 +205,10 @@ near validators next
 ```
 
 ## Şu ana kadar sunucumuzu güncelledik, bazı gerekli geliştirici ayarlarını yaptık, Shardnet ağındaki validatörümüz için Environment ayarlarını oluşturduk ve NEAR CLI içerisinde bulunan 3 tane görüntüleme komutuna göz attık. Buradan sonrasında node'umuzu kurmayla ve onu çalıştırmayla devam edeceğiz.
+
+# Sunucu kurulumunu yapma ve validatör node'u aktive etme
+
+Kaynak olarak: [Stake Wars: Episode III. Challenge 002](https://github.com/near/stakewars-iii/blob/main/challenges/002.md#stake-wars-episode-iii-challenge-002)
 
 # Sunucumuzun NEAR Stake Wars node kurulumu için yeterli olup olmadığına bakmak isterseniz bu kodu girebilirsiniz, girmenizi tavsiye ederim:
 ```
@@ -565,7 +568,36 @@ journalctl -n 100 -f -u neard | ccze -A
 
 - Aktif validatör setine girildikten sonra imzalanan blok sayısının %90'ın üzerinde olması gereklidir.
 
-# Staking pool oluşturma ve delege/stake etme işlemleri
+
+## Bence görevlerin en zor kısmı olan bu kısımla birlikte özet olarak; 
+
+- Sunucumuza gerekli geliştirici araçlarını yükledik (cargo, rust, python pip vb.), 
+
+- Konfigürasyon ve Environment ayarlarını yaptık, 
+
+- GitHub üzerinden node'umuzun çalışması için gerekli olan `nearcore`'u yükledik, 
+
+- Yüklediğimiz `nearcore` çalıştırdık,
+ 
+- NEAR Shardnet ağındaki ilk verileri içeren `genesis` dosyasını indirip çalıştırdık, 
+
+- `config.json`, `genesis.json`, ve `node_key.json` dosyalarımızı oluşturduk, 
+
+- Gerekli olmasa da isteyenler için en güncel snapshot(`genesis.json`)'u indirdik, 
+
+- Kurduğumuz node'umuzu çalıştırdık,
+
+
+- Gerekli olmasa da isteyenler için en güncel snapshot(`genesis.json`)'u indirdik, 
+
+- Kurduğumuz node'umuzu çalıştırdık,
+
+- NEAR Shardnet cüzdanımızla node'umuzu eşleştirip validatör oluşturduk.
+
+
+# 3) Staking pool oluşturma ve delege/stake etme işlemleri
+
+Kaynak: [Stake Wars: Episode III. Challenge 003](https://github.com/near/stakewars-iii/blob/main/challenges/003.md#stake-wars-episode-iii-challenge-003)
 
 NEAR, delegatörlerin fonlarının güvende kalmasını sağlamak için whitelist'e alınmış bir stake sözleşmesine sahip stake havuzu kullanır.
 
@@ -830,4 +862,123 @@ near call <staking_pool_id> resume_staking '{}' --accountId <accountId>
 - `<staking_pool_id>`: xx.factory.shardnet.near
  
 - `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+
  
+## Bu kısmın bitişiyle birlikte özel olarak; 
+
+- NEAR Shardnet ağı üzerinde staking havuzu açtık, 
+
+- Açtğımız staking havuzuna cüzdanımızdan NEAR deposit ettik ve bu NEAR'ları havuzumuza stake ettik, 
+
+- Havuzumuza stake ettiğimiz NEAR'ları unstake ettik, 
+
+- Unstake ettiğimiz NEAR'ları cüzdanımıza geri çektik (2-3 epoch bekledikten sonra),
+ 
+- NEAR Shardnet ağında delegator olarak ping gönderdik, 
+
+- Staking havuzumuzdaki toplam NEAR bakiyemizi öğrendik, 
+
+- Staking havuzumuzdaki toplam stake / unstake edilmiş NEAR bakiyemizi öğrendik, 
+
+- Staking havuzumuzda stake işlemlerini durdurduk ve tekrar başlattık.
+
+
+# 4) Node durumunu görüntülemek için ayarlamalar
+ 
+Kaynak: [Stake Wars: Episode III. Challenge 004](https://github.com/near/stakewars-iii/blob/main/challenges/004.md#stake-wars-episode-iii-challenge-004)
+ 
+## Bu bölümde kurduğumuz node'un durumunu gözlemlemek için kullanacağımız araçlara göz atacağız. Node'u çalışır durumda tutabilmek adına RPC'nin 3030 numaralı port noktasına kurulması ve kullanılması gerekir. 
+ 
+#### Log Dosyaları
+ 
+Log dosyaları kurulumu nereye yaptığınıza bağlı olarak ~/.nearup/logs dizininde ya da systemd'de depolanır.
+ 
+ 
+ Systemd Komutu:
+ 
+ ```
+journalctl -n 100 -f -u neard | ccze -A
+```
+ 
+Bu komut sayesinde akan logların örneğine ve bu örneğin ne ifade ettiğine aşağıdan bakabilirsiniz.
+ 
+ ```
+INFO stats: # 1368392 JAH2UK8ahcAhW859jyMk7NNFVn6bqSAuYNtkcYrZj2o7 Validator | 100 validators 34 peers ⬇ 430 kB/s ⬆ 478 kB/s 0.19 bps 274 Tgas/s CPU: 148%, Mem: 4.88 GB
+```
+ 
+- `Validator`: Bu kısım sizin aktif bir validatör olduğunuzu gösterir.
+ 
+- `100 Validators`: Bu kısım ağdaki toplam validatör sayısını belirtir.
+ 
+- `34 peers`: Bu kısım sizin bağlandığınız eşlerin sayısını gösterir. Consensus'a erişmek ve doğrulamaya başlayabilmek için en az 3 eşe ihtiyacınız vardır.
+ 
+- `# 1368392`: Bu kısım ağdaki toplam validatör sayısını belirtir.
+ 
+ 
+## RPC
+
+Ağdaki node'lar, port'u güvenlik duvarında açık olduğu sürece 3030 portu üzerinde RPC hizmetleri sunar. NEAR-CLI, RPC çağrılarını kullanır. RPC'nin genel kullanım alanları validatör istatistiklerini, node versiyonunu, delegatör stake'ini kontrol etmektir. Ayrıca bunun yanında RPC; blokzincir, hesaplar ve sözleşmeler ile etkileşime girmek için de kulanılabilmektedir.
+ 
+Aşağıda RPC servislerini nasıl kullanacağınızla ilgili birkaç komut bulunuyor, detaylı araştırmak isterseniz buraya göz atabilirsiniz: https://docs.near.org/docs/api/rpc
+ 
+# Bu komutumuz gerekli dosyaları indirir:
+
+ ```
+sudo apt install curl jq
+```
+ 
+![image](https://user-images.githubusercontent.com/101462877/180996701-ff5f8eee-8f34-47c0-a3ab-f10c81ce6915.png)
+
+Buradaki gibi devam etmeyi isteyip istemediğimizi soracaktır, Y yazıp enter'a basıyoruz.
+ 
+# Bu komut ile node'unuzun versiyonunu kontrol edebilirsiniz:
+
+ ```
+curl -s http://127.0.0.1:3030/status | jq .version
+```
+ 
+![image](https://user-images.githubusercontent.com/101462877/180997001-ee6bfc10-841c-4b07-87dd-5283b35631a2.png)
+
+Bu tür bir çıktı gelecektir.
+ 
+# Bu komut sayesinde stake havuzundaki delegatörleri ve stake ettikleri miktari öğrenebilirsiniz:
+
+ ```
+near view <your pool>.factory.shardnet.near get_accounts '{"from_index": 0, "limit": 10}' --accountId <accountId>.shardnet.near
+```
+ 
+- `<your pool>`: xx.factory.shardnet.near kısmındaki xx'i gireceksiniz
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+![image](https://user-images.githubusercontent.com/101462877/180998067-d0b21bae-e378-4f8f-a114-ebd9777b1d94.png)
+
+Bu tür bir çıktıya sahip olursunuz.
+ 
+# Bu komut eğer ağdan atıldıysak çalışır, ağdan neden atıldığımızı gösterir. Ayrıca bu komutu ağdan atıldıktan hemen bir sonraki epoch içerisinde girmemiz gerekir, diğer epoch'larda çalışmayacaktır:
+
+ ```
+curl -s -d '{"jsonrpc": "2.0", "method": "validators", "id": "dontcare", "params": [null]}' -H 'Content-Type: application/json' 127.0.0.1:3030 | jq -c '.result.prev_epoch_kickout[] | select(.account_id | contains ("<POOL_ID>"))' | jq .reason
+```
+ 
+- `<POOL_ID>`: xx.factory.shardnet.near
+ 
+
+ # Bu komut sayesinde ağ üzerinde kaç blok ürettiğinizi ve expected bok sayısını görebilirsiniz:
+
+ ```
+curl -s -d '{"jsonrpc": "2.0", "method": "validators", "id": "dontcare", "params": [null]}' -H 'Content-Type: application/json' 127.0.0.1:3030 | jq -c '.result.current_validators[] | select(.account_id | contains ("POOL_ID"))'
+```
+ 
+- `<POOL_ID>`: xx.factory.shardnet.near
+
+![image](https://user-images.githubusercontent.com/101462877/180998490-ed22b9e1-ba16-48d4-bed8-401c6cc41e17.png)
+
+Stake havuzunu yeni açtıysanız ve daha henüz aktif validatör değilseniz herhangi bir çıktı almazsınız.
+ 
+![image](https://user-images.githubusercontent.com/101462877/180998697-8f361c1f-3fd5-416f-b18f-6c2cb00d1871.png)
+
+Aktif bir validatöre sahip iseniz bu tür bir çıktı alırsınız. Göründüğü gibi "num_produced_blocks" kısmı 0 görünüyor. Çünkü aktif sette olsanız bile sadece ilk 100 aktif validatör blok üretir. Diğer aktif validatörlerin ürettiği bloklar ise chunk-only olarak adlandırılıyor.
+ 
+ 
+ # NEAR STAKE WARS KURULUM REHBERİMİZİN SONUNA GELDİK. NEAR MAINNET'İNE SEÇİLME ŞANSI İÇİN BURAYA KADAR GELDİYSENİZ GEÇMİŞ OLSUN DEMEK İSTİYORUM VE HERKESE BAŞARILAR DİLİYORUM :)
