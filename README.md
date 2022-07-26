@@ -581,11 +581,11 @@ near call factory.shardnet.near create_staking_pool '{"staking_pool_id": "<pool 
 
 ## Burada değiştirmeniz gereken kısımlar:
 
-- <pool id>: Bu kısıma stake havuz adımızı giriyoruz. Örneğin, `spiderman.factory.shardnet.near`
+- `<pool id>`: Bu kısıma stake havuz adımızı giriyoruz. Örneğin, pool'umuzun adı `spiderman.factory.shardnet.near` ise bu komutu girerken <pool id> kısmına `spiderman` yazacağız.
 
-- <accountId>: Bu kısıma hesap kimliğimizi giriyoruz. Örneğin, `spiderman.shardnet.near`
+- `<accountId>`: Bu kısıma hesap kimliğimizi giriyoruz. Örneğin, `spiderman.shardnet.near`
 
-- <public key>: Bu kısım için WinSCP'yi tekrar açıyoruz. Nasıl bağlanacağınızı yukarıda anlatmıştım.
+- `<public key>`: Bu kısım için WinSCP'yi tekrar açıyoruz. Nasıl bağlanacağınızı yukarıda anlatmıştım.
 
 ![image](https://user-images.githubusercontent.com/101462877/180886021-4659e678-986a-422e-8c6f-c906a7be82b3.png)
 
@@ -601,10 +601,19 @@ ed25519 ile başlayan `public.key` kısmını olduğu gibi kopyalıyoruz. Komut 
 
 - Reward_fee_fraction olarak belirtilen kısım varsayılan olarak %5 olarak belirtilmiş burada. İsterseniz değiştirebilirsiniz ama değiştirmenize gerek yok. Pool'a stake edenlerden alınacak fee'yi temsil ediyor.
 
-- <accountId>: Bu kısıma yine hesap kimliğimizi giriyoruz. Örneğin, `spiderman.shardnet.near`
+- `<accountId>`: Bu kısıma yine hesap kimliğimizi giriyoruz. Örneğin, `spiderman.shardnet.near`
 
-
+## Biraz karışık olduğu için ben kendi örnek node'umu oluştururken girdiğim komutu buraya bırakıyorum, buna bakarak kendinizinkini düzenleyin lütfen. Doğrudan yapıştırırsanız çalışmaz.
+ 
+ ```
+near call factory.shardnet.near create_staking_pool '{"staking_pool_id": "nearstakewars", "owner_id": "nearstakewars.shardnet.near", "stake_public_key": "ed25519:6UfGtVfCVg1hjiyR8nrrwL7A8vbFxxxxxxxxxxxxx", "reward_fee_fraction": {"numerator": 5, "denominator": 100}, "code_hash":"DD428g9eqLL8fWUxv8QSpVFzyHi1Qd16P8ephYCTmMSZ"}' --accountId="nearstakewars.shardnet.near" --amount=200 --gas=300000000000000
+```
+ 
+![image](https://user-images.githubusercontent.com/101462877/180963324-c88a7903-ce2e-4d3c-ad96-f868c8f25f93.png)
+ 
 > Bu komutu girmeden önce Shardnet cüzdanınızda en az 30 NEAR olduğuna emin olun. 30 NEAR, stake havuzu oluşturabilmek için tek seferde stake etmeniz gereken minimum miktar.
+ 
+## Yukarıdaki komutla birlikte Staking Havuzumuzu oluşturmuş olduk. Havuzunuzu [explorer]( https://explorer.shardnet.near.org/nodes/validators) üzerinden kontrol edebilirsiniz. Oluşturduğunuz an `proposal` kısmında bulunacaktır. Bir sonraki epoch'ta `joining` kısmında, eğer `kickout` olmazsanız da bir sonraki epoch'ta `active` kategorisine geçecektir.
 
 Oluşturduğunuz havuzun parametrelerini değiştirmek isterseniz, örneğin stake fee değerini değiştirmek isterseniz aşağıda bıraktığım komutu kullanabilirsiniz:
 
@@ -612,4 +621,213 @@ Oluşturduğunuz havuzun parametrelerini değiştirmek isterseniz, örneğin sta
 near call <pool_name> update_reward_fee_fraction '{"reward_fee_fraction": {"numerator": 1, "denominator": 100}}' --accountId <account_id> --gas=300000000000000
 ```
 
-Ağ patlamış interaktif bir şekilde node'u kuramadığım için yazmaya devam edemiyorum :(
+![image](https://user-images.githubusercontent.com/101462877/180960238-f01ea3da-eabd-49f4-af1b-b9f7fd06cfd1.png)
+
+Yukarıdaki gibi bir çıktı alırsanız değişmiş demektir.
+ 
+# Pool için İşlem Rehberi
+ 
+## NEAR'ları Deposit ve Stake Etme
+ 
+Aşağıdaki komut ile NEAR'larınızı cüzdanınızdan havuzunuza aktarabilir ve stake edebilirsiniz:
+ 
+```
+near call <staking_pool_id> deposit_and_stake --amount <amount> --accountId <accountId> --gas=300000000000000
+```
+ 
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<amount>`: stake etmek istediğiniz NEAR miktarı
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+![image](https://user-images.githubusercontent.com/101462877/180963092-cb632825-44ae-4ca7-b844-b2837b1d70ea.png)
+
+ 
+## NEAR'ları Havuzdan Unstake Etme
+ 
+Aşağıdaki komut ile NEAR'larınızı havuzunuzdan unstake edebilirsiniz. Fakat bu NEAR'ları doğrudan cüzdanınıza çekmez, bunun için aşağıda bahsettiğim `withdraw` başlığına göz atmalısınız:
+ 
+```
+near call <staking_pool_id> unstake '{"amount": "<amount yoctoNEAR>"}' --accountId <accountId> --gas=300000000000000
+```
+ 
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<amount yoctoNEAR>`: stake etmek istediğiniz NEAR miktarı, yoctoNEAR cinsinden.
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+![image](https://user-images.githubusercontent.com/101462877/180963448-e9da5bf3-3617-482c-84be-28d52e5cc082.png)
+ 
+Eğer stake havuzundaki tüm NEAR'ları unstake etmek isterseniz de aşağıdaki komutu kullanın:
+ 
+```
+near call <staking_pool_id> unstake_all --accountId <accountId> --gas=300000000000000
+```
+ 
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+![image](https://user-images.githubusercontent.com/101462877/180963706-2d1ad732-e410-4966-8b14-d72d666b3c35.png)
+
+
+## NEAR'ları Cüzdana Çekme
+ 
+Bu işlemi yapabilmek için öncelikle yukarıdan unstake yapmanız gerekir. Unstake periyodu yaklaşık 2-3 epoch içerisinde tamamlanır. Unstake periyodunun ardından YoctoNEAR'larınızı havuzdan cüzdana çekebilirsiniz.
+ 
+Cüzdana çekme için komut:
+
+```
+near call <staking_pool_id> withdraw '{"amount": "<amount yoctoNEAR>"}' --accountId <accountId> --gas=300000000000000
+```
+
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<amount yoctoNEAR>`: stake etmek istediğiniz NEAR miktarı, yoctoNEAR cinsinden.
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+
+Unstake edilmiş tüm NEAR'larınızı cüzdana çekmek isterseniz komut:
+ 
+```
+near call <staking_pool_id> withdraw_all --accountId <accountId> --gas=300000000000000
+```
+
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+## Ping İşlemi
+ 
+Ping işlemi, yeni bir teklif yayınlar ve delegatörleriniz için staking bakiyelerini günceller. Staking havuzu sayesinde kazandığınız ödülleri güncel tutmak için her epoch içerisinde en az bir ping gönderilmelidir.
+
+Ping komutu:
+
+```
+near call <staking_pool_id> ping '{}' --accountId <accountId> --gas=300000000000000
+```
+
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+![image](https://user-images.githubusercontent.com/101462877/180966647-1fde183a-9089-4723-8891-8c1057c1eb3d.png)
+ 
+Toplam bakiyenizi görüntülemek için komut:
+ 
+```
+near view <staking_pool_id> get_account_total_balance '{"account_id": "<accountId>"}'
+```
+
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+![image](https://user-images.githubusercontent.com/101462877/180966760-405f1882-d29f-43fd-82c2-3bf323e6cb3e.png)
+
+Buradaki o uzun yeşil 2500000xxx şeklinde devam eden sayı 250 NEAR demek oluyor.
+ 
+ 
+## Stake Edilmiş Bakiye
+ 
+Aşağıdaki komut sayesinde stake edilmiş toplam bakiyenizi öğrenebilirsiniz.
+ 
+Komut:
+
+```
+near view <staking_pool_id> get_account_staked_balance '{"account_id": "<accountId>"}'
+```
+ 
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+![image](https://user-images.githubusercontent.com/101462877/180967381-908f10e5-c407-4c42-a1a9-c661e37b6c5a.png)
+ 
+## Unstake Edilmiş Bakiye
+ 
+Aşağıdaki komut sayesinde unstake edilmiş toplam bakiyenizi öğrenebilirsiniz.
+ 
+Komut:
+
+```
+near view <staking_pool_id> get_account_unstaked_balance '{"account_id": "<accountId>"}'
+```
+ 
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+![image](https://user-images.githubusercontent.com/101462877/180967606-ef703190-0b39-4307-bf2d-97ce2b85150b.png)
+
+
+## Cüzdana Geri Çekilebilir Durumda Olan Bakiye
+ 
+Aşağıdaki komut sayesinde unstake edilmiş ve cüzdana geri çekebileceğiniz NEAR miktarını öğrenebilirsiniz. Unutmayın, sadece unlocked olmuş NEAR'ları cüzdanınıza geri çekebilirsiniz, unlocked olması için de unstake edildikten sonra 2-3 epoch beklemeniz gerekir.
+ 
+Komut:
+
+```
+near view <staking_pool_id> is_account_unstaked_balance_available '{"account_id": "<accountId>"}'
+```
+ 
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+![image](https://user-images.githubusercontent.com/101462877/180968189-7be6e4c3-02e0-4027-9db2-e5c9938fff79.png)
+
+Burada NEAR'larımı yeni unstake ettiğim ve 2-3 epoch geçmediği için NEAR'larım Withdraw için hazır değil, bu yüzden `false` çıktısı verdi. `True` çıktısı verdiğinde NEAR'larımızı cüzdana çekebiliriz.
+ 
+
+## Cüzdana Geri Çekilebilir Durumda Olan Bakiye
+ 
+Aşağıdaki komut sayesinde unstake edilmiş ve cüzdana geri çekebileceğiniz NEAR miktarını öğrenebilirsiniz. Unutmayın, sadece unlocked olmuş NEAR'ları cüzdanınıza geri çekebilirsiniz, unlocked olması için de unstake edildikten sonra 2-3 epoch beklemeniz gerekir.
+ 
+Komut:
+
+```
+near view <staking_pool_id> is_account_unstaked_balance_available '{"account_id": "<accountId>"}'
+```
+ 
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+![image](https://user-images.githubusercontent.com/101462877/180968189-7be6e4c3-02e0-4027-9db2-e5c9938fff79.png)
+
+Burada NEAR'larımı yeni unstake ettiğim ve 2-3 epoch geçmediği için NEAR'larım Withdraw için hazır değil, bu yüzden `false` çıktısı verdi. `True` çıktısı verdiğinde NEAR'larımızı cüzdana çekebiliriz.
+ 
+## Staking'i Durdurmak / Tekrar Başlatmak
+ 
+Aşağıdaki komut sayesinde staking işleminizi durdurabilirsiniz.
+ 
+###### Durdurmak
+ 
+Komut:
+
+```
+near call <staking_pool_id> pause_staking '{}' --accountId <accountId>
+```
+ 
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
+Aşağıdaki komut sayesinde staking işleminizi tekrar başlatabilirsiniz.
+ 
+###### Tekrar Başlatmak
+ 
+Komut:
+
+```
+near call <staking_pool_id> resume_staking '{}' --accountId <accountId>
+```
+ 
+- `<staking_pool_id>`: xx.factory.shardnet.near
+ 
+- `<accountId>`: cüzdan hesap kimliğiniz, xx.shardnet.near
+ 
