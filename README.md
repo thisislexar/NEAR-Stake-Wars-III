@@ -18,7 +18,7 @@ Daha fazla detay için [NEAR Stake Wars](https://near.org/stakewars/) websitesin
 
 ## Bu makalede bahsedeceğim NEAR Stake Wars III görevleri için son tarih [11 Ağustos](https://github.com/near/stakewars-iii/blob/main/challenges/challenge-summary.md). Bunun için, makaleyi gördüğünüz andan itibaren en erken tarihte başlamanızı öneririm.
 
-## Bu dokümanı sağ üstten forklayıp yıldızlamayı unutmayın, GitHub hesabınızda bulunması yararınıza olur.
+## Bu dokümanı sağ üstten forklayıp yıldızlamayı unutmayın, GitHub hesabınızda bulunması yararınıza olur. Ayrıca kurulumu yaparken lütfen okuyup anlayarak yapmaya çalışın, gördüğünüz her kodu yapıştırarak ilerlemenizi tavsiye etmem. Ne yaptığınızı bilerek ilerlemeniz sizin açınızdan çok daha sağlıklı olacaktır.
 
 # Kurulumda 4 başlık altında ilerleyeceğiz. Bunlar; 
 
@@ -954,4 +954,147 @@ Stake havuzunu yeni açtıysanız ve daha henüz aktif validatör değilseniz he
 Aktif bir validatöre sahip iseniz bu tür bir çıktı alırsınız. Göründüğü gibi "num_produced_blocks" kısmı 0 görünüyor. Çünkü aktif sette olsanız bile sadece ilk 100 aktif validatör blok üretir. Diğer aktif validatörlerin ürettiği bloklar ise chunk-only olarak adlandırılıyor.
  
  
- # NEAR STAKE WARS KURULUM REHBERİMİZİN SONUNA GELDİK. NEAR MAINNET'İNE SEÇİLME ŞANSI İÇİN BURAYA KADAR GELDİYSENİZ GEÇMİŞ OLSUN DEMEK İSTİYORUM VE HERKESE BAŞARILAR DİLİYORUM :)
+ # NORMAL ŞARTLARDA BURAYA KADAR OLAN KISMIN CHALLENGE 5 İÇİN YETERLİ OLMASI GEREKİYOR, ANCAK BEN CHALLENGE 6, 8 VE 9 İÇİN DE REHBER OLUŞTURMAYA KARAR VERDİM. BURAYA KADAR GELEN NEAR AĞI TOPLULUĞU ÜYELERİ 6,8 VE 9. CHALLENGE'LARININ ÖDÜLLERİNDEN GERİ KALMASIN İSTEDİM.
+ 
+# PEKİ CHALLENGE 7 NERDE DİYE SORACAK OLURSANIZ, CHALLENGE 7 İÇİN HERHANGİ BİR KOD KOMUT İŞLEMİ YOK. SİZİN KENDİ ÇABALARINIZLA YAPMANIZ GEREKEN BİR DATA SCIENCE GÖREVİ. BU YÜZDEN CHALLENGE 6-8 VE 9 İLE DEVAM EDECEĞİZ. CHALLENGE'LAR HAKKINDA DETAYLI BİLGİ İÇİN: https://github.com/near/stakewars-iii/tree/main/challenges
+
+
+
+# CHALLENGE 6: PİNG GÖREVİ
+
+Node validatöründe ağa otomatik olarak ping gönderen bir cron görevi oluşturacağız. Bu görev sayesinde, belirlediğimiz periyot süresiyle ağa otomatik olarak ping gönderilecektir. Gönderilen ping, NEAR ağı ve node'umuz arasındaki bağlantıyı güncellemeye yarar.
+
+WinSCP'ye tekrar giriyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181223928-d65f331a-3fa9-47db-95d9-5960d5c86582.png)
+
+Root dizininde sağ tıklayıp yeni klasör oluştur diyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181224048-d3de3414-3f91-45a6-8640-54cfcaf5d800.png)
+
+Klasörün adı `logs` olacak.
+
+![image](https://user-images.githubusercontent.com/101462877/181224129-6e4fedf3-d51a-457d-aa61-315e0b5cc76a.png)
+
+Oluşturduğumuz klasörün içine giriyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181224195-c94323e8-463d-49e6-bba8-e6e2cb4e1eed.png)
+
+Boş bir klasör bizi karşılıyor, sağ tıklayıp bu sefer dosya oluştur diyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181229724-0e3e75d9-d0e5-477d-a440-a29a5a096b44.png)
+
+Dosyanın adı `all.log` olacak şekilde oluşturuyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181230035-f2d2940e-ab87-4b9d-8a2c-4ae598048766.png)
+
+
+Boş dosya karşımıza geliyor, rastgele herhangi bir şeyler yazıyoruz ki dosyayı oluşturabilelim. Ctrl + S yapıp kaydediyoruz ve `all.log` dosyasını kapatıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181230473-a2f69dc0-f5bf-4e98-ba87-234b938a5e0c.png)
+
+
+Göründüğü gibi dosyamız burada oluştu, şimdi içine tekrar girip yazdığımız rastgele şeyi silip tekrar Ctrl + S yapıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181225532-15a742ce-3f66-47e8-824d-5ed399de28fc.png)
+
+Son durumda oluşturduğumuz dosyanın var olması ve içinin boş olması gerekiyor, yazdığınız rastgele şeyin hala dosyada kayıtlı olmadığına emin olun ve öyle devam edin. `all.log` dosyamızı kapatıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181230288-a8f20baf-4432-48a3-974c-325251d32c2b.png)
+
+Buradaki `root` yazısına tıklayarak root dizinimize geri dönüyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181226262-373baafa-20af-4775-b5ea-877ca33aaa91.png)
+
+`nearcore` dosyamızın içine giriyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181226346-d22ea131-c73a-4f63-8088-16913b06d414.png)
+
+`nearcore` klasörümüzün içinde `scripts` klasörünü bulup içine giriyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181226485-8645f66e-a3f2-4c82-bace-606f2ce0b2d0.png)
+
+Klasörümüzün içinde boş bir yere sağ tıklayıp dosya oluştur diyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181226675-7e8a7a67-140c-46e2-af6b-b4c9af221b01.png)
+
+Dosya adını görseldeki gibi dikkatli bir şekilde `ping.sh` yapıp tamam diyoruz.
+
+Açılan boş dosyanın içine aşağıdaki kodu olduğu gibi yapıştırıyoruz, fakat üzerinde değişiklik yapacağınız birkaç yer var onları kodun altına bırakıyorum.
+
+ ```
+#!/bin/sh
+# Ping call to renew Proposal added to crontab
+
+export NEAR_ENV=shardnet
+export LOGS=/root/logs
+export POOLID=<pool_id>
+export ACCOUNTID=<account_id>
+
+echo "---" >> $LOGS/all.log
+date >> $LOGS/all.log
+near call $POOLID.factory.shardnet.near ping '{}' --accountId $ACCOUNTID.shardnet.near --gas=300000000000000 >> $LOGS/all.log
+near proposals | grep $POOLID >> $LOGS/all.log
+near validators current | grep $POOLID >> $LOGS/all.log
+near validators next | grep $POOLID >> $LOGS/all.log
+ ```
+
+- `<pool_id>`: xx.factory.shardnet.near kısmındaki xx'i gireceksiniz
+ 
+- `<account_id>`: xx.shardnet.near kısmındaki xx'i gireceksiniz
+
+
+Değişiklikleri yaptıktan sonra Ctrl + S yaparak dosyayı kaydediyoruz ve kapatıyoruz.
+
+# Şimdi terminalimize geri dönüyoruz ve aşağıdaki kodu yapıştırıyoruz:
+
+ ```
+crontab -e
+ ```
+ 
+![image](https://user-images.githubusercontent.com/101462877/181228098-03ca16f4-930c-4707-84d4-7bdc9bb45e0e.png)
+
+Böyle bir ekran açılıyor, Shift + Enter yaparak yorum kısımlarını aşağıya ittiriyoruz ve aşağıdaki kodu buraya yapıştırıyoruz. Bu kod sayesinde node'umuz NEAR Shardnet Ağı'na her 2 saatte bir ping gönderecektir.
+
+ ```
+0 */2 * * * sh /root/nearcore/scripts/ping.sh
+ ```
+ 
+ ![image](https://user-images.githubusercontent.com/101462877/181228338-0843c12e-1417-4376-a4e2-022004c93f9c.png)
+
+Bu şekilde göründüğüne emin olduktan sonra Ctrl + X yapıyoruz. Kaydetmek isteyip istemediğimizi soruyor, Y diyoruz. Dosya adını soruyor, Enter basıyoruz.
+
+Ardından aşağıdaki kodu girip doğru şekilde kaydedip kaydetmediğimize bakabiliriz:
+
+ ```
+crontab -l
+ ```
+ 
+ ![image](https://user-images.githubusercontent.com/101462877/181228869-de67afdd-5562-4212-8c54-093e7d878c09.png)
+
+Böyle bir çıktı alırsanız doğru yapmışsınızdır, devam edebilirsiniz. Böyle bir çıktı almadıysanız `crontab -e` kodundan itibaren işlemleri tekrar yapın.
+
+Loglarımızı kontrol etmek için aşağıdaki kodu giriyoruz:
+
+```
+cat /root/logs/all.log
+ ```
+ 
+ ![image](https://user-images.githubusercontent.com/101462877/181230711-151079db-7eb5-4f83-a235-e73a6671be0e.png)
+
+İlk oluşturduğunuz zaman dosyanın için hala boşsa panik yapmayın, ping periyodunu 2 saat yaptığımız için veriler buraya 2 saatte bir düşecektir. Oluşturduktan en az 2 saat sonra üstteki komutu denediğinizde boş bir çıktı almayacaksınız.
+
+Örneğin:
+
+![image](https://user-images.githubusercontent.com/101462877/181234896-c9ccc7e7-32b0-4e12-992a-d36502f6acd8.png)
+
+
+#ÖNEMLİ!
+
+# BU GÖREVİ YAPTIKTAN SONRA YOLLAMANIZ GEREKEN BİR FORM VAR. DETAYLARINA https://github.com/thisislexar/stakewars-iii/blob/main/challenges/006.md LİNKİNE GİDEREK AŞAĞIDAKİ ACCEPTANCE CRITERIA'DAN ULAŞABİLİRSİNİZ. YAPMANIZ GEREKEN ŞEY [EXPLORER](https://explorer.shardnet.near.org/nodes/validators) 'A GİDEREK ARAMA KISMINA `XX.FACTORY.SHARDNET.NEAR` STAKING HAVUZ ID'NİZİ YAZMAK. BİRAZ AŞAĞI İNDİĞİNİZDE AŞAĞIDAKİ GİBİ TRANSACTION'LAR GÖRECEKSİNİZ. 
+
+![image](https://user-images.githubusercontent.com/101462877/181235376-cbec34d4-b83c-49c2-ac30-7d9a2683b3d0.png)
+
+BU PING TRANSACTION'LARINDAN 3-4 TANE OLDUKTAN SONRA FORM'A BURAYI SS ALIP SUBMITLIYORUZ. AYRICA EXPLORER LİNK'İMİZİ DE SUBMITLEMEMİZ GEREKİYOR. AŞAĞIYA FORM'U BIRAKIYORUM, GİRİP BAKTIĞINIZDA ANLARSINIZ ZATEN.
+
+FORM: https://docs.google.com/forms/d/e/1FAIpQLScp9JEtpk1Fe2P9XMaS9Gl6kl9gcGVEp3A5vPdEgxkHx3ABjg/viewform
