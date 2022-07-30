@@ -7,6 +7,8 @@
 
 ## NEAR Stake Wars challenge'larını tamamlayarak 4.5 milyon NEAR'dan pay kazanma şansı yakalayabilirsiniz. Ayrıca, görevleri tamamlayan validatörlerin 1 yıl kilitli olmak üzere 50 bin adete kadar NEAR coin kazanma şansı var. 
 
+## Takıldığınız yerler ya da sormak istediğiniz sorular için [LossNode Chat](https://t.me/LossNode) Telegram'ımıza katılabilirsiniz.
+
 NEAR Stake Wars, NEAR ağında güncel olarak bulunan 100 adet aktif validatör sayısını 300'den fazla validatör sayısına çıkarmak için oluşturulmuştur. Bu sayede NEAR ağının daha merkeziyetsiz ve daha güvenli olması hedeflenmektedir. 
 
 Daha fazla detay için [NEAR Stake Wars](https://near.org/stakewars/) websitesine göz atabilirsiniz. Ayrıca [Discord](https://discord.gg/kPcvwVtp) kanallarına katılmanızı öneririm, kurulum sırasında takıldığınız yerlerde diğer validatörler size yardımcı olabilir.
@@ -962,6 +964,8 @@ Aktif bir validatöre sahip iseniz bu tür bir çıktı alırsınız. Göründü
 
 # CHALLENGE 6: PİNG GÖREVİ
 
+Kaynak: [Stake Wars: Episode III. Challenge 006](https://github.com/thisislexar/stakewars-iii/blob/main/challenges/006.md)
+
 Node validatöründe ağa otomatik olarak ping gönderen bir cron görevi oluşturacağız. Bu görev sayesinde, belirlediğimiz periyot süresiyle ağa otomatik olarak ping gönderilecektir. Gönderilen ping, NEAR ağı ve node'umuz arasındaki bağlantıyı güncellemeye yarar.
 
 WinSCP'ye tekrar giriyoruz.
@@ -1098,3 +1102,159 @@ cat /root/logs/all.log
 BU PING TRANSACTION'LARINDAN 3-4 TANE OLDUKTAN SONRA FORM'A BURAYI SS ALIP SUBMITLİYORUZ. AYRICA EXPLORER LİNK'İMİZİ DE SUBMITLEMEMİZ GEREKİYOR. AŞAĞIYA FORM'U BIRAKIYORUM, GİRİP BAKTIĞINIZDA ANLARSINIZ ZATEN.
 
 FORM: https://docs.google.com/forms/d/e/1FAIpQLScp9JEtpk1Fe2P9XMaS9Gl6kl9gcGVEp3A5vPdEgxkHx3ABjg/viewform
+
+
+
+# CHALLENGE 8: STAKING ÖDÜLLERİNİN FARKLI HESAPLARA DAĞITILMASI
+
+Kaynak: [Stake Wars: Episode III. Challenge 008](https://github.com/thisislexar/stakewars-iii/blob/main/challenges/008.md)
+
+Bu bölümde staking havuzumuz sayesinde elde ettiğimiz gelirleri birden fazla hesaba bölüştürme görevini yapıyor olacağız. Bunun için isterseniz yeni hesaplar da açabilirsiniz ama ben rehberi hazırlarken ağda görev yapan diğer validatörlerin cüzdanlarına dağıtım yapacağım size de öyle yapmanızı tavsiye ederim. Çünkü [Challenge 8](https://github.com/thisislexar/stakewars-iii/blob/main/challenges/008.md)'in resmi dokümanında şöyle bir ifade var: `Would you like to contribute to other projects running a validator?`
+
+Aşağıda yapacak olduğumuz işlemlerle akıllı sözleşme oluşturacağız, bu sözleşme elde ettiğimiz staking havuz gelirlerini birden fazla hesaba bölmemize olanak tanıyacak.
+
+# Başlayalım:
+
+İlk olarak cargo ve Rust'ı yükleyerek başlıyoruz. Rehberin buraya kadar olan kısmını yaptıysanız sizde zaten yüklü olacaktır. 
+
+```
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+
+source $HOME/.cargo/env
+```
+
+Zaten yüklüyse aşağıdaki gibi bir uyarı alırsınız, sıkıntı yok bir sonraki komut ile devam edebilirsiniz.
+
+![image](https://user-images.githubusercontent.com/101462877/181924588-2ceb9680-926e-4a60-8546-4ffb186fec04.png)
+
+
+# wasm32-unknown-unknown araç zincirini ekleyelim:
+
+```
+rustup target add wasm32-unknown-unknown
+
+```
+
+
+# Staking havuzuyla alakalı gerekli klonlamaları yapalım:
+
+```
+git clone https://github.com/zavodil/near-staking-pool-owner
+```
+
+# Akıllı sözleşmemizi derleyelim:
+
+```
+cd near-staking-pool-owner/contract
+cargo build --target wasm32-unknown-unknown --release
+```
+
+Burası biraz zaman alacaktır, aşağıdaki gibi finished yazısını gördükten sonra devam edebiliriz.
+
+![image](https://user-images.githubusercontent.com/101462877/181924753-2998e27e-c297-485d-8b13-fb7136a5d09d.png)
+
+
+# Akıllı sözleşmemizi kendi hesabımıza dağıtalım. `<OWNER_ID>` kısmını değiştirmeniz gerekiyor. Ne ile değiştireceğinizi komutun hemen aşağısına bıraktım:
+
+```
+NEAR_ENV=shardnet near deploy <OWNER_ID>.shardnet.near --wasmFile target/wasm32-unknown-unknown/release/contract.wasm
+```
+
+`<OWNER_ID>`: xx.shardnet.near kısmındaki SADECE xx'i girelim.
+
+İşlem gerçekleştikten sonra aşağıdaki gibi bir çıktı alacaksınız. Emin olmak için `https://` ile başlayan linki kopyalayıp Google'a yapıştıralım. Hemen bir alttaki görselde gördüğünüz gibi Status kısmında `Succeeded` yazıyorsa olmuştur.
+
+![image](https://user-images.githubusercontent.com/101462877/181925294-8501cda0-40c3-469f-a089-bf1a8c90a82c.png) 
+
+![image](https://user-images.githubusercontent.com/101462877/181925371-d72784ae-2233-4957-b73d-a28853c000bf.png)
+
+
+# Staking gelirlerini farklı hesaplara bölmek için akıllı sözleşmemize hesapları kaydedelim. Birkaç tane değiştirmeniz gereken şey var, yine komutların altına not olarak bırakıyorum:
+
+```
+CONTRACT_ID=<OWNER_ID>.shardnet.near
+```
+
+`<OWNER_ID>`: xx.shardnet.near kısmındaki SADECE xx'i girelim.
+
+```
+NEAR_ENV=shardnet near call $CONTRACT_ID new '{"staking_pool_account_id": "<STAKINGPOOL_ID>.factory.shardnet.near", "owner_id":"<OWNER_ID>.shardnet.near", "reward_receivers": [["<SPLITED_ACCOUNT_ID_1>.shardnet.near", {"numerator": 3, "denominator":10}], ["<SPLITED_ACCOUNT_ID_2>.shardnet.near", {"numerator": 70, "denominator":100}]]}' --accountId $CONTRACT_ID
+```
+
+`<STAKINGPOOL_ID>`: xx.factory.shardnet.near kısmındaki SADECE xx'i girelim.
+
+`<OWNER_ID>`: xx.shardnet.near kısmındaki SADECE xx'i girelim.
+
+`<SPLITED_ACCOUNT_ID_1>`: Staking gelirini böleceğiniz hesaplardan birisi. xx.shardnet.near kısmındaki SADECE xx'i girelim.
+
+`<SPLITED_ACCOUNT_ID_2>`: Staking gelirini böleceğiniz hesaplardan diğeri. xx.shardnet.near kısmındaki SADECE xx'i girelim.
+
+Yine uzun ve karmaşık olabileceği için örnek bir komutu aşağıya bırakıyorum. LÜTFEN doğrudan yapıştırmayın, bir işe yaramaz.
+
+`Fatih` adında bir staking havuzumuz olduğunu varsayalım. Bu staking havuzunun gelirlerini `Sultan`ve `Terim` arasında paylaştırıyor olalım. Girmeniz gereken komutlar aşağıdakiler gibi olacaktır:
+
+```
+CONTRACT_ID=Fatih.shardnet.near
+```
+
+```
+NEAR_ENV=shardnet near call $CONTRACT_ID new '{"staking_pool_account_id": "Fatih.factory.shardnet.near", "owner_id":"Fatih.shardnet.near", "reward_receivers": [["Sultan.shardnet.near", {"numerator": 3, "denominator":10}], ["Terim.shardnet.near", {"numerator": 70, "denominator":100}]]}' --accountId $CONTRACT_ID
+```
+
+Bir süre bekledikten sonra alttaki gibi bir çıktı alırsınız. Yine teyit etme amacıyla `https://` ile başlayan linki kopyalayalım ve Google'a yapıştıralım. Bir alt görselde gördüğünüz gibi Status kısmı `Succeeded` olmalıdır. 
+
+![image](https://user-images.githubusercontent.com/101462877/181933423-b9d1ea9b-9989-47c5-95e9-5153e8bebdb8.png)
+
+
+# BU KOMUTU YAPMADAN ÖNCE BİR SÜRE BEKLEMENİZİ TAVSİYE EDERİM. STAKING HAVUZUNUZDAKİ GELİRLERİN BİRAZ BİRİKMESİ GEREKİYOR. Staking havuzumuzdaki gelirleri 2 farklı hesaba bölüştürmek için akıllı sözleşmemizi devreye soktuk, şimdi ise bu gelirleri `withdraw` metoduyla bu cüzdanlara dağıtacağız:
+
+Bu komutu girelim.
+
+```
+CONTRACT_ID=<OWNER_ID>.shardnet.near
+```
+
+`<OWNER_ID>`: xx.shardnet.near kısmındaki SADECE xx'i girelim.
+
+Ardından bu komutu girelim.
+
+```
+NEAR_ENV=shardnet near call $CONTRACT_ID withdraw '{}' --accountId $CONTRACT_ID --gas 200000000000000
+```
+
+## Böylelikle staking havuzumuzda elde ettiğimiz gelirleri akıllı sözleşmemiz sayesinde 2 farklı hesaba dağıtmış olduk.
+
+
+
+# BURASI ÖNEMLİ FORM DOLDURMAYI YAPMAZSANIZ GÖREVİNİZ GEÇERLİ SAYILMAZ, en sonuncu komutu girdikten sonra yine bize aşağıdaki gibi `https://` ile başlayan bir link verdi. Bu linki Google'a yapıştırıyoruz ve status kısmında `Succeeeded` yazdığından emin oluyoruz. Ayrıca bu komuttan aldığımız çıktıyı aşağıdaki gibi tamamı görünecek şekilde screenshot(ekran görüntüsü) alıp kaydediyoruz.
+
+![split-log](https://user-images.githubusercontent.com/101462877/181926210-8063f536-ea9e-43ce-a79c-5ebffc27e952.png)
+
+
+Ardından https://docs.google.com/forms/d/e/1FAIpQLScp9JEtpk1Fe2P9XMaS9Gl6kl9gcGVEp3A5vPdEgxkHx3ABjg/viewform buraya giderek withdraw kısmında verilen linki aşağıdaki görselde gördüğünüz `Challenge URL` kısmına yapıştırıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181926004-56d39ee8-e532-4bed-9853-228b0d6e2595.png)
+
+Sonrasında, az önce withdraw işlemi için aldığımız screenshot'ı aşağıda gördüğünüz `Challenge Image` kısmına yüklüyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/181926160-a06aae0d-336a-49e7-a2d2-fdb0e7a0058d.png)
+
+
+Ardından formun kalanını EKSİKSİZ VE TAMAMEN DOĞRU bir şekilde doldurup gönderiyoruz.
+
+
+## Challenge 8 için yapacaklarımız bu kadar, buraya kadar yaptıklarımızı basitçe özetleyecek olursak;
+
+- Daha önce cargo ve Rust yüklemediysek cargo ve Rust araçlarını yükledik.
+
+- `wasm32-unknown-unknown` araç zincirini ekledik.
+
+- Staking havuzumuz için gerekli dosyaları klonladık.
+
+- Akıllı sözleşmemizi derledik.
+
+- Akıllı sözleşmemizi kendi hesabımız için dağıttık.
+
+- Akıllı sözleşmemizi staking havuz gelirlerimizi dağıtacağımız iki farklı hesap için kullandık.
+
+- Akıllı sözleşmemiz sayesinde staking havuz gelirlerimizi başarıyla hesaplara dağıttık.
