@@ -130,10 +130,6 @@ Terminalimiz yüklendikten sonra artık node'umuzu kurmaya başlayabiliriz.
 sudo su
 ```
 
-```
-cd root
-```
-
 # İlk kodumuz sunucumuzu güncellemek için:
 ```
 sudo apt update && sudo apt upgrade -y
