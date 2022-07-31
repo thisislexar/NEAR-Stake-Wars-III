@@ -124,6 +124,16 @@ Terminalimiz yüklendikten sonra artık node'umuzu kurmaya başlayabiliriz.
 
 ## Kodları direkt buradan kopyaladıktan sonra terminalde sağ tıklayıp yapıştıra basarak yapıştırabilirsiniz. Sizin için daha kolay ve pratik olur. Bu noktada, ilk olarak NEAR-CLI kurulumu yapacağız. NEAR-CLI, NEAR blokzinciri ile uzaktan prosedür çağrıları (RPC) sayesinde iletişim kuran bir komut satırı arabirimidir. 
 
+# Root yetkisi alalım:
+
+```
+sudo su
+```
+
+```
+cd root
+```
+
 # İlk kodumuz sunucumuzu güncellemek için:
 ```
 sudo apt update && sudo apt upgrade -y
@@ -356,6 +366,12 @@ cd ~/nearcore
 ## Burada altını çizdiğim `Downloading headers` kısmı %100 olana kadar bekleyin. %100 olduğuna emin olduktan sonra Ctrl+C ile akışı durdurup tekrar komut girmeye devam edebilirsiniz.
 
 
+# YUKARIDAKİ KOMUTU GİRDİKTEN SONRA AŞAĞIDAKİ GÖRSELDEKİ GİBİ `RECEIVE BAD BLOCK: INVALID CHUNK STATE` TARZI HATALAR ALIRSANIZ HARDFORK SONRASI GÜNCELLEMESİNİ YAPIP TEKRAR DENEMENİZİ ÖNERİRİM. LİNKİ BURADA: [STAKE WARS GÜNCELLEME REHBERİ](https://github.com/thisislexar/NEAR-Stake-Wars-III-Guncelleme-Rehberi)
+
+![image](https://user-images.githubusercontent.com/101462877/182033251-7d1b3197-8065-4591-aaa7-1ffeddc80ada.png)
+
+
+
 # Node'umuzu oluşturduğumuz Shardnet cüzdanına bağlayarak aktive ediyoruz:
 
 ```
@@ -480,6 +496,11 @@ Eğer yukarıdaki komutu girerken `No such file or directory` hatası alırsanı
 ![image](https://user-images.githubusercontent.com/101462877/180784554-a014a854-caea-489c-b892-36c4ce0084aa.png)
 
 `Downloading blocks` kısmı %100 olana dek bekliyoruz. %100 olduktan sonra Ctrl + C yapıyoruz.
+
+
+# YUKARIDAKİ KOMUTU GİRDİKTEN SONRA AŞAĞIDAKİ GÖRSELDEKİ GİBİ `RECEIVE BAD BLOCK: INVALID CHUNK STATE` TARZI HATALAR ALIRSANIZ HARDFORK SONRASI GÜNCELLEMESİNİ YAPIP TEKRAR DENEMENİZİ ÖNERİRİM. LİNKİ BURADA: [STAKE WARS GÜNCELLEME REHBERİ](https://github.com/thisislexar/NEAR-Stake-Wars-III-Guncelleme-Rehberi)
+
+![image](https://user-images.githubusercontent.com/101462877/182033251-7d1b3197-8065-4591-aaa7-1ffeddc80ada.png)
 
 # Systemd ayarlarını yapıyoruz:
 
@@ -1258,3 +1279,109 @@ Ardından formun kalanını EKSİKSİZ VE TAMAMEN DOĞRU bir şekilde doldurup g
 - Akıllı sözleşmemizi staking havuz gelirlerimizi dağıtacağımız iki farklı hesap için kullandık.
 
 - Akıllı sözleşmemiz sayesinde staking havuz gelirlerimizi başarıyla hesaplara dağıttık.
+
+
+
+# CHALLENGE 9: VALİDATÖR UPTIME (ÇALIŞMA SÜRESİ) YÖNETİMİ
+
+Kaynak: [Stake Wars: Episode III. Challenge 009](https://github.com/thisislexar/stakewars-iii/blob/main/challenges/009.md)
+
+Rehberimizin bu bölümünde analiz ve raporlama için RPC 3030 port'unu açıyor olacağız. Ayrıca bu görevi tamamlamak için ShardNet ağında %70'in üzerinde Uptime yakalamamız gerekiyor.
+
+## ‼️ Unutmayın, MainNet üzerinde çalışan bir validatöre sahipseniz uptime'ınızın %95'ten yüksek olması gerekir. Aksi taktirde, aktif setten 3 epoch'a kadar atılabilirsiniz ve staking ödüllerinizi alamazsınız.
+
+----------------------------------------💡Bilgi Köşesi💡----------------------------------------
+
+Bir validatör, tam olarak senkronize olmadan ağa ping gönderirse bunun ağa bir saldırı olarak kabul edilmekte olduğunu biliyor muydunuz?
+
+-------------------------------------💡Bilgi Köşesi Bitti💡-------------------------------------
+
+
+## Yukarıda bahsettiğim gibi, bu görevin "uptime" kısmının geçerli sayılabilmesi için önemli başlıklar var. Bunlar:
+
+- ShardNet üzerindeki uptime'ımızın %70'in üzerinde olması gerekiyor. Validatörümüzün uptime'ını ve diğer metriklerini öğrenmek için [ShardNet Uptime Leaderboard](https://openshards.io/shardnet-uptime-scoreboard/)'a gidiyoruz ve validatör ismimizi aratıyoruz.
+
+- Eğer %70'in altında bir değere sahipse buna neden olan "chunk üretme" sorunlarını ortadan kaldırmamız gerekiyor. Bunun için buraya bakmanızı öneririm: https://github.com/near/stakewars-iii/blob/main/challenges/troubleshooting.md 
+
+
+## Challenge 9'un geçerli sayılabilmesi için önemli olan diğer bir kısım ise " Teşhis raporlaması için 3030 port'unu açmak"
+
+# 3030 port'unun açık olup olmadığını kontrol etmek için aşağıdaki komutu giriyoruz:
+
+
+```
+sudo iptables -L | grep 3030
+```
+
+# Eğer aşağıdaki görseldeki gibi herhangi bir çıktı vermeden komut alma satırına geçiyorsa görselin hemen altındaki komutu girip 3030 port'umuzu açıyoruz:
+
+![image](https://user-images.githubusercontent.com/101462877/182034943-fd8bbb53-e09e-446c-b75a-d5aa70132a47.png)
+
+
+```
+sudo iptables -A INPUT -p tcp --dport 3030 -j ACCEPT
+```
+
+Açtıktan sonra `sudo iptables -L | grep 3030` komutunu girdikten sonra aşağıdaki gibi bir çıktı gözükecektir.
+
+![image](https://user-images.githubusercontent.com/101462877/182034977-822a1110-06c9-4a14-9f72-393a29a56284.png)
+
+# Sunucu yeni başlatmaları için yapılandırma ayarlarını kaydediyoruz:
+
+#### İlk olarak `iptables-persistent`'ı yüklüyoruz:
+```
+sudo apt install iptables-persistent
+```
+
+![image](https://user-images.githubusercontent.com/101462877/182035097-44a96bfc-0214-4851-ad36-478873eee782.png)
+
+Bu kısıma 'Y' yazıp enter'lıyoruz.
+
+#### Ardından aşağıdaki komutla devam ediyoruz:
+
+```
+sudo dpkg-reconfigure iptables-persistent
+```
+
+![image](https://user-images.githubusercontent.com/101462877/182035175-6e18cd18-1703-4801-b160-40824e7ef2e0.png)
+
+Bu kısımda da `<Yes>` kısmına gelip enter basıyoruz.
+
+![image](https://user-images.githubusercontent.com/101462877/182035198-0a09e52e-3e98-4d2c-b35f-cb6c0773df06.png)
+
+Burada da yine aynı şekilde `<Yes>` kısmına gelip enter basıyoruz.
+
+
+# Aşağıdaki linke gidip 3030 port'umuzu açtığımızı teyit ediyoruz, `<YOUR IP>` kısmına validatörü kurduğunuz sunucunun IP'sini yazacaksınız:
+
+http://`<YOUR IP>`:3030/status
+
+# Ya da diğer bir çözüm olarak aşağıda bıraktığım siteye giderek 3030 port'unun açık olup olmadığını kontrol edebilirsiniz:
+
+https://www.yougetsignal.com/tools/open-ports/
+
+![image](https://user-images.githubusercontent.com/101462877/182036881-73af7853-3ecd-47a7-b895-c233cf24bcb0.png)
+
+Burada gösterdiğim gibi `open` gözüküyorsa açıktır.
+
+# ÖNEMLİ! BU CHALLENGE İÇİN FORM'U TEKRAR SUBMITLİYORUZ. 
+
+- Challenge URL: http://`<YOUR IP>`:3030/status 
+
+`<YOUR IP>` kısmını sunucu IP'nizle değiştireceksiniz tabiki.
+
+- Challenge image: [Leaderboard](https://openshards.io/shardnet-uptime-scoreboard/)'da validatörünüzün uptime'ının screenshot (ekran görüntüsü)'ı
+
+FORM LİNKİ: https://docs.google.com/forms/d/e/1FAIpQLScp9JEtpk1Fe2P9XMaS9Gl6kl9gcGVEp3A5vPdEgxkHx3ABjg/viewform
+
+
+
+## Challenge 9 bu kadardı, nispeten diğer Challenge'lara göre daha kısa ve kolay. Challenge 9'da yaptıklarımızı özetlersek;
+
+- [Leaderboard](https://openshards.io/shardnet-uptime-scoreboard/) üzerinde validatörümüzün uptime'ına ve diğer metriklere göz attık.
+
+- 3030 port'unu açtık.
+
+- `iptables-persistent`'ı yükledik ve konfigürasyon ayarlamaları yaptık.
+
+- 3030 port'umuzu public olarak görüntüledik.
