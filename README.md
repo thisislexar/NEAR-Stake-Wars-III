@@ -277,20 +277,20 @@ source $HOME/.cargo/env
 # Burada GitHub üzerinden `nearcore`'u klonlayacağız:
 ```
 git clone https://github.com/near/nearcore
-cd nearcore
+cd $HOME/nearcore
 git fetch
 ```
 
 # Ardından bu kodla devam ediyoruz:
 ```
-git checkout 0f81dca95a55f975b6e54fe6f311a71792e21698
+git checkout 68bfa84ed1455f891032434d37ccad696e91e4f5
 ```
 
-# Şimdi ise klonladığımız `nearcore`'u çalıştıracağız, bu kodun çalışması biraz uzun sürebilir:
+# Şimdi ise binary'yi çalıştırıyoruz:
 ```
 cargo build -p neard --release --features shardnet
 ```
-## Bu kısımda eğer No such file tarzı bir uyarı veriyorsa yanlış klasördesinizdir, `cd nearcore` yazarak tekrar deneyin.
+## Bu kısımda eğer No such file tarzı bir uyarı veriyorsa yanlış klasördesinizdir, `cd $HOME/nearcore` yazarak tekrar deneyin.
 
 # Çalışma dizinini başlatıyoruz:
 Node'un çalışması için bir çalışma dizini ve konfigürasyon dosyaları gerekir. Bunlar için aşağıdaki kodu çalıştırıyoruz.
@@ -354,7 +354,7 @@ pip3 install awscli --upgrade
 # Node'u çalıştırma komutunu giriyoruz:
 
 ```
-cd ~/nearcore
+cd $HOME/nearcore
 ./target/release/neard --home ~/.near run
 ```
 ![image](https://user-images.githubusercontent.com/101462877/180760174-cd28c2b1-0108-4125-acda-465dbf71c52e.png)
@@ -487,7 +487,7 @@ target/release/neard run
 
 ![image](https://user-images.githubusercontent.com/101462877/180782985-2b0ade3d-d999-4882-94bb-496c632ef14e.png)
 
-Eğer yukarıdaki komutu girerken `No such file or directory` hatası alırsanız `cd nearcore` komutunu girip tekrar deneyin.
+Eğer yukarıdaki komutu girerken `No such file or directory` hatası alırsanız `cd $HOME/nearcore` komutunu girip tekrar deneyin.
 
 ![image](https://user-images.githubusercontent.com/101462877/180784554-a014a854-caea-489c-b892-36c4ce0084aa.png)
 
@@ -1060,9 +1060,9 @@ near validators current | grep $POOLID >> $LOGS/all.log
 near validators next | grep $POOLID >> $LOGS/all.log
  ```
 
-- `<pool_id>`: xx.factory.shardnet.near kısmındaki xx'i gireceksiniz
+- `<pool_id>`: xx.factory.shardnet.near kısmındaki xx'i gireceksiniz. ÖRNEĞİN, benim havuzumun adı `nearstakewars.factory.shardnet.near` ve ben burada `<pool_id>` yerine SADECE `nearstakewars` yazmalıyım.
  
-- `<account_id>`: xx.shardnet.near kısmındaki xx'i gireceksiniz
+- `<account_id>`: xx.shardnet.near kısmındaki xx'i gireceksiniz. ÖRNEĞİN, benim hesabımın adı `nearstakewars.shardnet.near` ve ben burada `<account_id>` yerine SADECE `nearstakewars` yazmalıyım.
 
 
 Değişiklikleri yaptıktan sonra Ctrl + S yaparak dosyayı kaydediyoruz ve kapatıyoruz.
