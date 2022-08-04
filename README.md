@@ -543,7 +543,8 @@ sudo systemctl start neard
 # Bir hatadan dolayı servis üzerinde değişiklikler yaparsanız, aşağıdaki komutla reload etmeniz gerekir:
 
 ```
-sudo systemctl reload neard
+sudo systemctl daemon-reload
+sudo systemctl restart neard
 ```
 
 # Sistemimiz başlatıldı. Log çıktılarını izlemek isterseniz komut:
