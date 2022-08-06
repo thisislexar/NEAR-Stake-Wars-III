@@ -283,7 +283,7 @@ git fetch
 
 # Ardından bu kodla devam ediyoruz:
 ```
-git checkout 78ef2f55857d6118047efccf070ae0f7ddb232ea
+git checkout 68bfa84ed1455f891032434d37ccad696e91e4f5
 ```
 
 # Şimdi ise binary'yi çalıştırıyoruz:
