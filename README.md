@@ -185,6 +185,8 @@ export NEAR_ENV=shardnet
 # NEAR testnet Environment'ını kalıcı olarak ayarlamak için bu komutu da kullanabilirsiniz:
 ```
 echo 'export NEAR_ENV=shardnet' >> ~/.bashrc
+echo 'export NEAR_ENV=shardnet' >> ~/.bash_profile
+source $HOME/.bash_profile
 ```
 
 ## Environment'ımızı ayarladık. Şimdi CLI'yi test edecek komutlara geçebiliriz.
