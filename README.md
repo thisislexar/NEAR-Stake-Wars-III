@@ -500,7 +500,7 @@ Eğer yukarıdaki komutu girerken `No such file or directory` hatası alırsanı
 
 ![image](https://user-images.githubusercontent.com/101462877/182033251-7d1b3197-8065-4591-aaa7-1ffeddc80ada.png)
 
-# Systemd ayarlarını yapıyoruz:
+# Servis dosyamızı oluşturacağız:
 
 ```
 sudo nano /etc/systemd/system/neard.service
