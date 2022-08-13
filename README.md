@@ -503,7 +503,7 @@ Eğer yukarıdaki komutu girerken `No such file or directory` hatası alırsanı
 # Systemd ayarlarını yapıyoruz:
 
 ```
-sudo vi /etc/systemd/system/neard.service
+sudo nano /etc/systemd/system/neard.service
 ```
 
 # Burada bir pencere açılacak, aşağıdaki kodu olduğu gibi yapıştırıyoruz:
@@ -528,7 +528,10 @@ KillMode=mixed
 WantedBy=multi-user.target
 ```
 
-## Ardından bu pencereden çıkmak için Shift + Z + Z yapıyoruz. Shift'ten elimizi çekmeden iki kere arka arkaya Z'ye basıyoruz.
+## Ardından bu pencereden çıkmak için sırasıyla;
+- Ctrl + X
+- Y
+- Enter'a basıp kapatıyoruz.
 
 # Sistemi enable hale getiriyoruz:
 
