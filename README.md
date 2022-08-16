@@ -256,7 +256,7 @@ sudo apt install clang build-essential make
 
 # Rust ve Cargo yükleme:
 ```
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl -sf -L https://static.rust-lang.org/rustup.sh | sh
 ```
 
 ![image](https://user-images.githubusercontent.com/101462877/180748697-d858bb63-4cf5-4c5c-9cdf-b9f19a944d29.png)
@@ -285,7 +285,7 @@ git fetch
 
 # Ardından bu kodla devam ediyoruz:
 ```
-git checkout 68bfa84ed1455f891032434d37ccad696e91e4f5
+git checkout f7f0cb22e85e9c781a9c71df7dcb17f507ff6fde
 ```
 
 # Şimdi ise binary'yi çalıştırıyoruz:
