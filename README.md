@@ -18,7 +18,7 @@ Daha fazla detay için [NEAR Stake Wars](https://near.org/stakewars/) websitesin
 
 
 
-## Bu makalede bahsedeceğim NEAR Stake Wars III görevleri için son tarih [11 Ağustos](https://github.com/near/stakewars-iii/blob/main/challenges/challenge-summary.md). Bunun için, makaleyi gördüğünüz andan itibaren en erken tarihte başlamanızı öneririm.
+## Bu makalede bahsedeceğim NEAR Stake Wars III görevleri için son tarih [7 Eylül](https://github.com/near/stakewars-iii/blob/main/challenges/challenge-summary.md). Bunun için, makaleyi gördüğünüz andan itibaren en erken tarihte başlamanızı öneririm.
 
 ## Bu dokümanı sağ üstten forklayıp yıldızlamayı unutmayın, GitHub hesabınızda bulunması yararınıza olur. Ayrıca kurulumu yaparken lütfen okuyup anlayarak yapmaya çalışın, gördüğünüz her kodu yapıştırarak ilerlemenizi tavsiye etmem. Ne yaptığınızı bilerek ilerlemeniz sizin açınızdan çok daha sağlıklı olacaktır.
 
@@ -69,7 +69,13 @@ Cüzdan kurulduğunda bizi böyle bir sayfa karşılıyor, buradaki coinler ger�
 
 
 
-NEAR Stake Wars III için sistem gereksinimleri bu şekilde belirlenmiş. Bizim de buna göre bir sunucu kiralayıp işlemlerimizi bu sunucu üzerinde yapmamız gerekiyor. Ayrıca sunucu temin ettiğimiz şirketin de sağ tarafta listeli olanlardan olmasına dikkat edelim.
+NEAR Stake Wars III için sistem gereksinimleri bu şekilde belirlenmiş. Fakat ilerleyen süreçte bu gereksinimler Stake Wars için yetersiz kalmaya başladı. Benim önerdiğim sistem gereksinimlerini ise aşağıya bırakıyorum. Biraz yüksek gereksinimler, kurup kurmamak size kalmış tabiki.
+
+```
+8 vCPU
+32GB RAM
+400GB SSD
+```
 
 ## Ben bu makale için Digital Ocean üzerinden sunucu kiralayacağım. 2 ay için 100$ ücretsiz sunucu kiralama hakkı veriyor. Linkini buraya bırakıyorum: https://try.digitalocean.com/freetrialoffer/
 
@@ -91,9 +97,9 @@ Görselde görüldüğü gibi 100$ kredimiz aktive oluyor, create diyoruz ve dro
  
 Görseldeki gibi işletim sistemi olarak Ubuntu 20.04 (LTS) x64 seçiyoruz. Aşağı doğru iniyoruz, sunucunun donanımını seçeceğiz.
 
-![image](https://user-images.githubusercontent.com/101462877/180667303-7aed5f20-6ad6-48ea-abc0-698fab60df52.png) ![image](https://user-images.githubusercontent.com/101462877/180667356-6baa8154-41a4-421c-8d79-f7a24ed5851d.png)
+![180667303-7aed5f20-6ad6-48ea-abc0-698fab60df52](https://user-images.githubusercontent.com/101462877/185362046-5f466491-69d8-4d8f-9162-6852d90b0692.png)
 
-Soldaki görselde gördüğünüz gibi Regular with SSD'ye tıklıyoz, 48$ olan sunucuyu seçiyoruz ve sistem gereksinimlerinde bulunan 500 GB SSD'yi karşılayabilmek için Add Block Storage'a tıklıyoruz. Açılan kısımda 500 GB'yi seçiyoruz.
+Üstteki görselde gördüğünüz gibi Regular with SSD'ye tıklıyoruz, 48$ olan sunucuyu seçiyoruz.
 
 ![image](https://user-images.githubusercontent.com/101462877/180667387-b2b035cb-1b62-4222-80bb-988edfb5dc1c.png)
 
