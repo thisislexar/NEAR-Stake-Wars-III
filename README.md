@@ -11,7 +11,7 @@
 
 NEAR Stake Wars, NEAR ağında güncel olarak bulunan 100 adet aktif validatör sayısını 300'den fazla validatör sayısına çıkarmak için oluşturulmuştur. Bu sayede NEAR ağının daha merkeziyetsiz ve daha güvenli olması hedeflenmektedir. 
 
-Daha fazla detay için [NEAR Stake Wars](https://near.org/stakewars/) websitesine göz atabilirsiniz. Ayrıca [Discord](https://discord.gg/kPcvwVtp) kanallarına katılmanızı öneririm, kurulum sırasında takıldığınız yerlerde diğer validatörler size yardımcı olabilir.
+Daha fazla detay için [NEAR Stake Wars](https://near.org/stakewars/) websitesine göz atabilirsiniz. Ayrıca [Discord](https://discord.gg/nzKQkF48Vp) kanallarına katılmanızı öneririm, kurulum sırasında takıldığınız yerlerde diğer validatörler size yardımcı olabilir.
 
 ![NEAR-Protocol](https://user-images.githubusercontent.com/101462877/180665840-8c59f322-6163-4c15-8468-3d7c83745488.jpg)
 
